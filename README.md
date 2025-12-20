@@ -23,6 +23,7 @@ Cette application Spring Boot simule un service de streaming vidéo avec des fon
 - **H2 Database** (base de données en mémoire)
 - **Chaos Monkey for Spring Boot 2.5.1**
 - **Spring Boot Actuator**
+- **SpringDoc OpenAPI 2.8.14** (documentation API avec Swagger UI)
 - **Maven**
 
 ## 🚀 Installation et démarrage
@@ -88,11 +89,58 @@ L'application démarre sur `http://localhost:8080`
 - `GET /api/recommendations/trending` - Vidéos tendances
 - `GET /api/recommendations/popular` - Vidéos populaires
 
+## 📚 Documentation API (SpringDoc OpenAPI)
+
+L'application intègre **SpringDoc OpenAPI** pour générer automatiquement une documentation interactive de tous les endpoints REST.
+
+### Accès à la documentation
+
+Une fois l'application démarrée, la documentation est accessible via :
+
+- **Swagger UI** (interface interactive) : `http://localhost:8080/swagger-ui.html`
+- **API Docs** (JSON OpenAPI) : `http://localhost:8080/api-docs`
+
+### Fonctionnalités Swagger UI
+
+- 📖 Documentation complète de tous les endpoints
+- 🧪 Test interactif des API directement depuis le navigateur
+- 📝 Schémas des modèles de données (Video, User, WatchHistory, etc.)
+- 🏷️ Organisation par tags (Catalogue, Utilisateurs, Streaming, Recommandations)
+- 📊 Exemples de requêtes et réponses
+
+### Configuration
+
+La configuration SpringDoc est définie dans `application.properties` :
+
+```properties
+springdoc.api-docs.path=/api-docs
+springdoc.swagger-ui.path=/swagger-ui.html
+springdoc.swagger-ui.operationsSorter=method
+springdoc.swagger-ui.tagsSorter=alpha
+```
+
 ## 🐵 Chaos Monkey
 
 ### Configuration
 
 Chaos Monkey est activé et contrôlable via Spring Boot Actuator.
+
+> [!IMPORTANT]
+> Pour activer Chaos Monkey, il est **indispensable** d'ajouter la ligne suivante dans `src/main/resources/application.properties` :
+> ```properties
+> spring.profiles.active=chaos-monkey
+> ```
+> Sans cette configuration, Chaos Monkey sera présent dans l'application mais **restera inactif**.
+
+**Configuration complète dans `application.properties` :**
+```properties
+# Actuator endpoints for Chaos Monkey control
+management.endpoints.web.exposure.include=health,info,chaosmonkey
+management.endpoint.chaosmonkey.enabled=true
+
+# Activation du profil Chaos Monkey (OBLIGATOIRE)
+spring.profiles.active=chaos-monkey
+```
 
 ### Endpoints Actuator
 
