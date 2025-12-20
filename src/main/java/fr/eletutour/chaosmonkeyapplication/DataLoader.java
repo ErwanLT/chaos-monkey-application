@@ -144,11 +144,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Documentaries
         videos.add(videoRepository.save(new Video("Planet Earth: The Future", "Climate change documentary",
-                "Documentary", 2023, 180, 9.4, "/thumbnails/planet-earth.jpg", Video.VideoType.DOCUMENTARY)));
+                "Documentary", 2023, 180, 9.4, "/thumbnails/planet-earth.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("The AI Revolution", "Artificial intelligence impact", "Documentary",
-                2023, 95, 8.7, "/thumbnails/ai-revolution.jpg", Video.VideoType.DOCUMENTARY)));
+                2023, 95, 8.7, "/thumbnails/ai-revolution.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("Ocean Depths", "Deep sea exploration", "Documentary", 2022, 120, 9.0,
-                "/thumbnails/ocean-depths.jpg", Video.VideoType.DOCUMENTARY)));
+                "/thumbnails/ocean-depths.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("Ancient Civilizations", "Lost cities uncovered", "Documentary", 2023,
                 240, 8.9, "/thumbnails/ancient-civs.jpg", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("The Space Race 2.0", "Modern space exploration", "Documentary", 2023,
