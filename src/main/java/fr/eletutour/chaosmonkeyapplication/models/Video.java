@@ -1,6 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "videos")
