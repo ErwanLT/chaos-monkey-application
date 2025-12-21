@@ -25,6 +25,8 @@ public class Video {
 
     private String thumbnailUrl;
 
+    private String trailerUrl;
+
     @Enumerated(EnumType.STRING)
     private VideoType type;
 
@@ -44,6 +46,12 @@ public class Video {
         this.thumbnailUrl = thumbnailUrl;
         this.type = type;
         this.viewCount = 0;
+    }
+
+    public Video(String title, String description, String genre, Integer releaseYear,
+                 Integer durationMinutes, Double rating, String thumbnailUrl, String trailerUrl, VideoType type) {
+        this(title, description, genre, releaseYear, durationMinutes, rating, thumbnailUrl, type);
+        this.trailerUrl = trailerUrl;
     }
 
     // Getters and Setters
@@ -125,6 +133,14 @@ public class Video {
 
     public void setViewCount(Integer viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public String getTrailerUrl() {
+        return trailerUrl;
+    }
+
+    public void setTrailerUrl(String trailerUrl) {
+        this.trailerUrl = trailerUrl;
     }
 
     public enum VideoType {

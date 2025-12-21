@@ -56,7 +56,7 @@ public class DataLoader implements CommandLineRunner {
 
         // Action Movies
         videos.add(videoRepository.save(new Video("The Dark Sentinel", "A vigilante fights crime in a dystopian city",
-                "Action", 2023, 142, 8.5, "/thumbnails/dark-sentinel.png", Video.VideoType.MOVIE)));
+                "Action", 2023, 142, 8.5, "/thumbnails/dark-sentinel.png", "/trailer/dark-sentinel.mp4", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Velocity", "High-speed chase across continents", "Action", 2022, 118,
                 7.8, "/thumbnails/velocity.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Iron Protocol", "Elite soldiers on a dangerous mission", "Action",
