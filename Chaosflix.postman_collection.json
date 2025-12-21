@@ -1,0 +1,2366 @@
+{
+	"info": {
+		"_postman_id": "13a1fdd5-2145-4358-b464-5d53ca97e264",
+		"name": "Chaosflix",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12559449",
+		"_collection_link": "https://www.postman.com/erwanlt/workspace/chaos-monkey/collection/12559449-13a1fdd5-2145-4358-b464-5d53ca97e264?action=share&source=collection_link&creator=12559449"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "{id}",
+							"item": [
+								{
+									"name": "subscription",
+									"item": [
+										{
+											"name": "Informations d'abonnement",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/users/:id/subscription",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"users",
+														":id",
+														"subscription"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												},
+												"description": "Récupère les informations d'abonnement d'un utilisateur (type, accès HD, accès Premium)"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/users/:id/subscription",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"users",
+																":id",
+																"subscription"
+															],
+															"variable": [
+																{
+																	"key": "id",
+																	"value": "4480",
+																	"description": "Identifiant de l'utilisateur"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"key_0\": true\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Détails d'un utilisateur",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "4480",
+													"description": "Identifiant de l'utilisateur"
+												}
+											]
+										},
+										"description": "Récupère les détails d'un utilisateur par son identifiant"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/users/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"users",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"id\": 4286,\n  \"email\": \"string\",\n  \"username\": \"string\",\n  \"subscriptionType\": \"BASIC\",\n  \"createdAt\": \"1984-02-12T00:00:59.756Z\",\n  \"country\": \"string\"\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "email",
+							"item": [
+								{
+									"name": "{email}",
+									"item": [
+										{
+											"name": "Recherche par email",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/users/email/:email",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"users",
+														"email",
+														":email"
+													],
+													"variable": [
+														{
+															"key": "email",
+															"value": "string",
+															"description": "Adresse email de l'utilisateur"
+														}
+													]
+												},
+												"description": "Récupère un utilisateur par son adresse email"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/users/email/:email",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"users",
+																"email",
+																":email"
+															],
+															"variable": [
+																{
+																	"key": "email",
+																	"value": "string",
+																	"description": "Adresse email de l'utilisateur"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"id\": 4286,\n  \"email\": \"string\",\n  \"username\": \"string\",\n  \"subscriptionType\": \"BASIC\",\n  \"createdAt\": \"1984-02-12T00:00:59.756Z\",\n  \"country\": \"string\"\n}"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Liste tous les utilisateurs",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								},
+								"description": "Récupère la liste complète de tous les utilisateurs"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"users"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"id\": 876,\n    \"email\": \"string\",\n    \"username\": \"string\",\n    \"subscriptionType\": \"BASIC\",\n    \"createdAt\": \"1987-12-12T10:59:33.343Z\",\n    \"country\": \"string\"\n  },\n  {\n    \"id\": 4461,\n    \"email\": \"string\",\n    \"username\": \"string\",\n    \"subscriptionType\": \"PREMIUM\",\n    \"createdAt\": \"1970-05-07T06:20:48.825Z\",\n    \"country\": \"string\"\n  }\n]"
+								}
+							]
+						},
+						{
+							"name": "Créer un utilisateur",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 4286,\n  \"email\": \"string\",\n  \"username\": \"string\",\n  \"subscriptionType\": \"BASIC\",\n  \"createdAt\": \"1984-02-12T00:00:59.756Z\",\n  \"country\": \"string\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								},
+								"description": "Crée un nouvel utilisateur dans le système"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"id\": 4286,\n  \"email\": \"string\",\n  \"username\": \"string\",\n  \"subscriptionType\": \"BASIC\",\n  \"createdAt\": \"1984-02-12T00:00:59.756Z\",\n  \"country\": \"string\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/users",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"users"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": 4286,\n  \"email\": \"string\",\n  \"username\": \"string\",\n  \"subscriptionType\": \"BASIC\",\n  \"createdAt\": \"1984-02-12T00:00:59.756Z\",\n  \"country\": \"string\"\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "streaming",
+					"item": [
+						{
+							"name": "start",
+							"item": [
+								{
+									"name": "Démarrer un streaming",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"key_0\": 3894,\n  \"key_1\": 27\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/streaming/start",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"streaming",
+												"start"
+											]
+										},
+										"description": "Démarre une session de streaming pour un utilisateur et une vidéo"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"key_0\": 3894,\n  \"key_1\": 27\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/streaming/start",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"streaming",
+														"start"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"key_0\": true\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "progress",
+							"item": [
+								{
+									"name": "Mettre à jour la progression",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/api/streaming/progress",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"streaming",
+												"progress"
+											]
+										},
+										"description": "Met à jour la progression de visionnage d'une vidéo pour un utilisateur"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"key_0\": \"string\",\n  \"key_1\": \"string\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/api/streaming/progress",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"streaming",
+														"progress"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"id\": 4995,\n  \"userId\": 4022,\n  \"videoId\": 5245,\n  \"watchedAt\": \"2000-10-23T00:35:51.088Z\",\n  \"progressPercentage\": 1922,\n  \"completed\": false\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "quality",
+							"item": [
+								{
+									"name": "Qualité de streaming",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/streaming/quality?networkSpeed=string",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"streaming",
+												"quality"
+											],
+											"query": [
+												{
+													"key": "networkSpeed",
+													"value": "string",
+													"description": "Vitesse réseau (slow, medium, fast)"
+												}
+											]
+										},
+										"description": "Détermine la qualité de streaming optimale en fonction de la vitesse réseau"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/streaming/quality?networkSpeed=string",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"streaming",
+														"quality"
+													],
+													"query": [
+														{
+															"key": "networkSpeed",
+															"value": "string",
+															"description": "Vitesse réseau (slow, medium, fast)"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"key_0\": true\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "history",
+							"item": [
+								{
+									"name": "{userId}",
+									"item": [
+										{
+											"name": "Historique de visionnage",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/streaming/history/:userId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"streaming",
+														"history",
+														":userId"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												},
+												"description": "Récupère l'historique complet de visionnage d'un utilisateur"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/streaming/history/:userId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"streaming",
+																"history",
+																":userId"
+															],
+															"variable": [
+																{
+																	"key": "userId",
+																	"value": "4480",
+																	"description": "Identifiant de l'utilisateur"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": 5027,\n    \"userId\": 3669,\n    \"videoId\": 8721,\n    \"watchedAt\": \"2005-04-01T21:19:47.787Z\",\n    \"progressPercentage\": 6952,\n    \"completed\": true\n  },\n  {\n    \"id\": 6362,\n    \"userId\": 6377,\n    \"videoId\": 3617,\n    \"watchedAt\": \"1966-03-06T14:02:58.214Z\",\n    \"progressPercentage\": 9439,\n    \"completed\": true\n  }\n]"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "completed",
+							"item": [
+								{
+									"name": "{userId}",
+									"item": [
+										{
+											"name": "Vidéos complétées",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/streaming/completed/:userId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"streaming",
+														"completed",
+														":userId"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												},
+												"description": "Récupère la liste des vidéos complétées par un utilisateur (progression >= 90%)"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/streaming/completed/:userId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"streaming",
+																"completed",
+																":userId"
+															],
+															"variable": [
+																{
+																	"key": "userId",
+																	"value": "4480",
+																	"description": "Identifiant de l'utilisateur"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": 5027,\n    \"userId\": 3669,\n    \"videoId\": 8721,\n    \"watchedAt\": \"2005-04-01T21:19:47.787Z\",\n    \"progressPercentage\": 6952,\n    \"completed\": true\n  },\n  {\n    \"id\": 6362,\n    \"userId\": 6377,\n    \"videoId\": 3617,\n    \"watchedAt\": \"1966-03-06T14:02:58.214Z\",\n    \"progressPercentage\": 9439,\n    \"completed\": true\n  }\n]"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "recommendations",
+					"item": [
+						{
+							"name": "generate",
+							"item": [
+								{
+									"name": "{userId}",
+									"item": [
+										{
+											"name": "Générer des recommandations",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/recommendations/generate/:userId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"recommendations",
+														"generate",
+														":userId"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												},
+												"description": "Génère de nouvelles recommandations pour un utilisateur"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/recommendations/generate/:userId",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"recommendations",
+																"generate",
+																":userId"
+															],
+															"variable": [
+																{
+																	"key": "userId",
+																	"value": "4480",
+																	"description": "Identifiant de l'utilisateur"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "string"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "{userId}",
+							"item": [
+								{
+									"name": "Recommandations personnalisées",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/recommendations/:userId",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"recommendations",
+												":userId"
+											],
+											"variable": [
+												{
+													"key": "userId",
+													"value": "4480",
+													"description": "Identifiant de l'utilisateur"
+												}
+											]
+										},
+										"description": "Récupère les recommandations personnalisées pour un utilisateur basées sur son historique"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/recommendations/:userId",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"recommendations",
+														":userId"
+													],
+													"variable": [
+														{
+															"key": "userId",
+															"value": "4480",
+															"description": "Identifiant de l'utilisateur"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": 1808,\n    \"userId\": 3993,\n    \"videoId\": 407,\n    \"score\": 9200.669984599286,\n    \"reason\": \"string\",\n    \"generatedAt\": \"2009-01-21T12:05:53.932Z\"\n  },\n  {\n    \"id\": 4982,\n    \"userId\": 9682,\n    \"videoId\": 7209,\n    \"score\": 3635.1662459470213,\n    \"reason\": \"string\",\n    \"generatedAt\": \"1961-01-30T20:16:46.204Z\"\n  }\n]"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "trending",
+							"item": [
+								{
+									"name": "Vidéos tendances",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/recommendations/trending",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"recommendations",
+												"trending"
+											]
+										},
+										"description": "Récupère les vidéos actuellement en tendance"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/recommendations/trending",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"recommendations",
+														"trending"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "catalog",
+					"item": [
+						{
+							"name": "videos",
+							"item": [
+								{
+									"name": "{id}",
+									"item": [
+										{
+											"name": "Détails d'une vidéo",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/catalog/videos/:id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"catalog",
+														"videos",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "4480",
+															"description": "Identifiant de la vidéo"
+														}
+													]
+												},
+												"description": "Récupère les détails d'une vidéo spécifique par son identifiant"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/:id",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																":id"
+															],
+															"variable": [
+																{
+																	"key": "id",
+																	"value": "4480",
+																	"description": "Identifiant de la vidéo"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "{\n  \"id\": 618,\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"genre\": \"string\",\n  \"releaseYear\": 6804,\n  \"durationMinutes\": 1779,\n  \"rating\": 1852.741526660997,\n  \"thumbnailUrl\": \"string\",\n  \"trailerUrl\": \"string\",\n  \"type\": \"MOVIE\",\n  \"viewCount\": 3281\n}"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "type",
+									"item": [
+										{
+											"name": "{type}",
+											"item": [
+												{
+													"name": "Vidéos par type",
+													"request": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/type/:type",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																"type",
+																":type"
+															],
+															"variable": [
+																{
+																	"key": "type",
+																	"value": "SERIES",
+																	"description": "Type de vidéo"
+																}
+															]
+														},
+														"description": "Récupère toutes les vidéos d'un type spécifique (MOVIE, SERIES, DOCUMENTARY)"
+													},
+													"response": [
+														{
+															"name": "OK",
+															"originalRequest": {
+																"method": "GET",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "*/*"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/api/catalog/videos/type/:type",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"api",
+																		"catalog",
+																		"videos",
+																		"type",
+																		":type"
+																	],
+																	"variable": [
+																		{
+																			"key": "type",
+																			"value": "SERIES",
+																			"description": "Type de vidéo"
+																		}
+																	]
+																}
+															},
+															"status": "OK",
+															"code": 200,
+															"_postman_previewlanguage": "text",
+															"header": [
+																{
+																	"key": "Content-Type",
+																	"value": "*/*"
+																}
+															],
+															"cookie": [],
+															"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "top-rated",
+									"item": [
+										{
+											"name": "Vidéos les mieux notées",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/catalog/videos/top-rated",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"catalog",
+														"videos",
+														"top-rated"
+													]
+												},
+												"description": "Récupère les vidéos avec les meilleures notes (rating >= 4.5)"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/top-rated",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																"top-rated"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "search",
+									"item": [
+										{
+											"name": "Recherche de vidéos",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/catalog/videos/search?query=string",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"catalog",
+														"videos",
+														"search"
+													],
+													"query": [
+														{
+															"key": "query",
+															"value": "string",
+															"description": "Terme de recherche"
+														}
+													]
+												},
+												"description": "Recherche des vidéos par titre ou description"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/search?query=string",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																"search"
+															],
+															"query": [
+																{
+																	"key": "query",
+																	"value": "string",
+																	"description": "Terme de recherche"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "popular",
+									"item": [
+										{
+											"name": "Vidéos populaires",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/catalog/videos/popular",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"catalog",
+														"videos",
+														"popular"
+													]
+												},
+												"description": "Récupère les vidéos les plus populaires (nombre de vues > 1000)"
+											},
+											"response": [
+												{
+													"name": "OK",
+													"originalRequest": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/popular",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																"popular"
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [
+														{
+															"key": "Content-Type",
+															"value": "*/*"
+														}
+													],
+													"cookie": [],
+													"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "genre",
+									"item": [
+										{
+											"name": "{genre}",
+											"item": [
+												{
+													"name": "Vidéos par genre",
+													"request": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/api/catalog/videos/genre/:genre",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"api",
+																"catalog",
+																"videos",
+																"genre",
+																":genre"
+															],
+															"variable": [
+																{
+																	"key": "genre",
+																	"value": "string",
+																	"description": "Genre de la vidéo (Action, Drama, Comedy, etc.)"
+																}
+															]
+														},
+														"description": "Récupère toutes les vidéos d'un genre spécifique"
+													},
+													"response": [
+														{
+															"name": "OK",
+															"originalRequest": {
+																"method": "GET",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "*/*"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/api/catalog/videos/genre/:genre",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"api",
+																		"catalog",
+																		"videos",
+																		"genre",
+																		":genre"
+																	],
+																	"variable": [
+																		{
+																			"key": "genre",
+																			"value": "string",
+																			"description": "Genre de la vidéo (Action, Drama, Comedy, etc.)"
+																		}
+																	]
+																}
+															},
+															"status": "OK",
+															"code": 200,
+															"_postman_previewlanguage": "text",
+															"header": [
+																{
+																	"key": "Content-Type",
+																	"value": "*/*"
+																}
+															],
+															"cookie": [],
+															"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "Liste toutes les vidéos",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/catalog/videos",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"catalog",
+												"videos"
+											]
+										},
+										"description": "Récupère la liste complète de toutes les vidéos disponibles dans le catalogue"
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/api/catalog/videos",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"api",
+														"catalog",
+														"videos"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "[\n  {\n    \"id\": 1519,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 8337,\n    \"durationMinutes\": 7102,\n    \"rating\": 4798.749472091277,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"DOCUMENTARY\",\n    \"viewCount\": 3923\n  },\n  {\n    \"id\": 9386,\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"genre\": \"string\",\n    \"releaseYear\": 6823,\n    \"durationMinutes\": 4253,\n    \"rating\": 2775.3625386351464,\n    \"thumbnailUrl\": \"string\",\n    \"trailerUrl\": \"string\",\n    \"type\": \"MOVIE\",\n    \"viewCount\": 7018\n  }\n]"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "actuator",
+			"item": [
+				{
+					"name": "chaosmonkey",
+					"item": [
+						{
+							"name": "watchers",
+							"item": [
+								{
+									"name": "get watchers",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"watchers"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"watchers"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"controller\": false,\n  \"restController\": true,\n  \"service\": true,\n  \"repository\": true,\n  \"component\": true,\n  \"restTemplate\": true,\n  \"webClient\": true,\n  \"actuatorHealth\": true,\n  \"beans\": [\n    \"string\",\n    \"string\"\n  ]\n}"
+										}
+									]
+								},
+								{
+									"name": "update watchers",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"controller\": true,\n  \"restController\": false,\n  \"service\": false,\n  \"repository\": true,\n  \"component\": false,\n  \"restTemplate\": false,\n  \"webClient\": false,\n  \"actuatorHealth\": false,\n  \"beans\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"watchers"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "watch nothing",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"controller\": false,\n  \"restController\": false,\n  \"service\": false,\n  \"repository\": false,\n  \"component\": false,\n  \"restTemplate\": false,\n  \"webClient\": false,\n  \"actuatorHealth\": false,\n  \"beans\": [\n    \n  ]\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"watchers"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "string"
+										},
+										{
+											"name": "watch controllers",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"controller\": true,\n  \"restController\": false,\n  \"service\": false,\n  \"repository\": false,\n  \"component\": false,\n  \"restTemplate\": false,\n  \"webClient\": false,\n  \"actuatorHealth\": false,\n  \"beans\": [\n    \n  ]\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"watchers"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "string"
+										},
+										{
+											"name": "watch services",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"controller\": true,\n  \"restController\": false,\n  \"service\": true,\n  \"repository\": false,\n  \"component\": false,\n  \"restTemplate\": false,\n  \"webClient\": false,\n  \"actuatorHealth\": false,\n  \"beans\": [\n    \n  ]\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/watchers",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"watchers"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "string"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "enable",
+							"item": [
+								{
+									"name": "activation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/enable",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"enable"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/enable",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"enable"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"enabledAt\": \"2002-01-29T17:01:56.490Z\",\n  \"disabledAt\": \"1964-02-26T17:07:25.648Z\",\n  \"enabledFor\": {\n    \"raw\": \"string\",\n    \"formatted\": \"string\"\n  },\n  \"enabled\": false\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "disable",
+							"item": [
+								{
+									"name": "desactivation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/disable",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"disable"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/disable",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"disable"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"enabledAt\": \"2002-01-29T17:01:56.490Z\",\n  \"disabledAt\": \"1964-02-26T17:07:25.648Z\",\n  \"enabledFor\": {\n    \"raw\": \"string\",\n    \"formatted\": \"string\"\n  },\n  \"enabled\": false\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "assaults",
+							"item": [
+								{
+									"name": "runtime",
+									"item": [
+										{
+											"name": "attack",
+											"item": [
+												{
+													"name": "runtime assault",
+													"request": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "*/*"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults/runtime/attack",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"actuator",
+																"chaosmonkey",
+																"assaults",
+																"runtime",
+																"attack"
+															]
+														}
+													},
+													"response": [
+														{
+															"name": "OK",
+															"originalRequest": {
+																"method": "POST",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "*/*"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults/runtime/attack",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"actuator",
+																		"chaosmonkey",
+																		"assaults",
+																		"runtime",
+																		"attack"
+																	]
+																}
+															},
+															"status": "OK",
+															"code": 200,
+															"_postman_previewlanguage": "text",
+															"header": [
+																{
+																	"key": "Content-Type",
+																	"value": "*/*"
+																}
+															],
+															"cookie": [],
+															"body": "string"
+														}
+													]
+												}
+											]
+										}
+									]
+								},
+								{
+									"name": "get assaults",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"assaults"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"assaults"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"level\": 6065,\n  \"deterministic\": true,\n  \"latencyRangeStart\": 235357310,\n  \"latencyRangeEnd\": 283559973,\n  \"latencyActive\": false,\n  \"exceptionsActive\": true,\n  \"exception\": {\n    \"arguments\": [\n      {\n        \"type\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"type\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"method\": \"string\",\n    \"type\": \"string\"\n  },\n  \"killApplicationActive\": true,\n  \"killApplicationCronExpression\": \"string\",\n  \"memoryActive\": true,\n  \"memoryMillisecondsHoldFilledMemory\": 1578644575,\n  \"memoryMillisecondsWaitNextIncrease\": 10725,\n  \"memoryFillIncrementFraction\": 0.12876555922660549,\n  \"memoryFillTargetFraction\": 0.9034881149897657,\n  \"memoryCronExpression\": \"string\",\n  \"cpuActive\": true,\n  \"cpuMillisecondsHoldLoad\": 111426955,\n  \"cpuLoadTargetFraction\": 0.11260299600598372,\n  \"cpuCronExpression\": \"string\",\n  \"runtimeAssaultCronExpression\": \"string\",\n  \"watchedCustomServices\": [\n    \"string\",\n    \"string\"\n  ]\n}"
+										}
+									]
+								},
+								{
+									"name": "update assault",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"level\": 1,\n  \"deterministic\": true,\n  \"latencyRangeStart\": 1,\n  \"latencyRangeEnd\": 1,\n  \"latencyActive\": true,\n  \"exceptionsActive\": true,\n  \"exception\": {\n    \"type\": \"string\",\n    \"method\": \"string\",\n    \"arguments\": [\n      {\n        \"type\": \"string\",\n        \"value\": \"string\"\n      }\n    ]\n  },\n  \"killApplicationActive\": true,\n  \"killApplicationCronExpression\": \"string\",\n  \"memoryActive\": true,\n  \"memoryMillisecondsHoldFilledMemory\": 1500,\n  \"memoryMillisecondsWaitNextIncrease\": 100,\n  \"memoryFillIncrementFraction\": 1,\n  \"memoryFillTargetFraction\": 0.05,\n  \"memoryCronExpression\": \"string\",\n  \"cpuActive\": true,\n  \"cpuMillisecondsHoldLoad\": 1500,\n  \"cpuLoadTargetFraction\": 0.1,\n  \"cpuCronExpression\": \"string\",\n  \"watchedCustomServices\": [\n    \"string\"\n  ]\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"assaults"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"level\": 6065,\n  \"deterministic\": true,\n  \"latencyRangeStart\": 235357310,\n  \"latencyRangeEnd\": 283559973,\n  \"latencyActive\": false,\n  \"exceptionsActive\": true,\n  \"exception\": {\n    \"arguments\": [\n      {\n        \"type\": \"string\",\n        \"value\": \"string\"\n      },\n      {\n        \"type\": \"string\",\n        \"value\": \"string\"\n      }\n    ],\n    \"method\": \"string\",\n    \"type\": \"string\"\n  },\n  \"killApplicationActive\": true,\n  \"killApplicationCronExpression\": \"string\",\n  \"memoryActive\": true,\n  \"memoryMillisecondsHoldFilledMemory\": 1578644575,\n  \"memoryMillisecondsWaitNextIncrease\": 10725,\n  \"memoryFillIncrementFraction\": 0.12876555922660549,\n  \"memoryFillTargetFraction\": 0.9034881149897657,\n  \"memoryCronExpression\": \"string\",\n  \"cpuActive\": true,\n  \"cpuMillisecondsHoldLoad\": 111426955,\n  \"cpuLoadTargetFraction\": 0.11260299600598372,\n  \"cpuCronExpression\": \"string\",\n  \"runtimeAssaultCronExpression\": \"string\",\n  \"watchedCustomServices\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/assaults",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"assaults"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "string"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "status",
+							"item": [
+								{
+									"name": "status",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey",
+												"status"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "OK",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "*/*"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/actuator/chaosmonkey/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"actuator",
+														"chaosmonkey",
+														"status"
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "*/*"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"enabledAt\": \"2002-01-29T17:01:56.490Z\",\n  \"disabledAt\": \"1964-02-26T17:07:25.648Z\",\n  \"enabledFor\": {\n    \"raw\": \"string\",\n    \"formatted\": \"string\"\n  },\n  \"enabled\": false\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "configuration",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/actuator/chaosmonkey",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"actuator",
+										"chaosmonkey"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "*/*"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/actuator/chaosmonkey",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"actuator",
+												"chaosmonkey"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"chaosMonkeyProperties\": {\n    \"enabled\": true,\n    \"lastEnabledToggleTimestamp\": 923,\n    \"togglePrefix\": \"string\"\n  },\n  \"assaultProperties\": {\n    \"level\": 704,\n    \"deterministic\": false,\n    \"latencyRangeStart\": 1750392449,\n    \"latencyRangeEnd\": 1171266857,\n    \"latencyActive\": true,\n    \"exceptionsActive\": false,\n    \"exception\": {\n      \"arguments\": [\n        {\n          \"type\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"type\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"method\": \"string\",\n      \"type\": \"string\"\n    },\n    \"killApplicationActive\": false,\n    \"killApplicationCronExpression\": \"string\",\n    \"memoryActive\": true,\n    \"memoryMillisecondsHoldFilledMemory\": 1125618344,\n    \"memoryMillisecondsWaitNextIncrease\": 20610,\n    \"memoryFillIncrementFraction\": 0.23527542254280798,\n    \"memoryFillTargetFraction\": 0.9009699572369679,\n    \"memoryCronExpression\": \"string\",\n    \"cpuActive\": true,\n    \"cpuMillisecondsHoldLoad\": 433353491,\n    \"cpuLoadTargetFraction\": 0.9479842137357133,\n    \"cpuCronExpression\": \"string\",\n    \"runtimeAssaultCronExpression\": \"string\",\n    \"watchedCustomServices\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"watcherProperties\": {\n    \"controller\": false,\n    \"restController\": false,\n    \"service\": false,\n    \"repository\": false,\n    \"component\": true,\n    \"restTemplate\": true,\n    \"webClient\": false,\n    \"actuatorHealth\": false,\n    \"beans\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}
