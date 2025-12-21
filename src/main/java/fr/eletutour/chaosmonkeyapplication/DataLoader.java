@@ -74,7 +74,7 @@ public class DataLoader implements CommandLineRunner {
         videos.add(videoRepository.save(new Video("The Last Colony", "Humanity's final outpost", "Sci-Fi", 2020, 148,
                 8.4, "/thumbnails/last-colony.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Chronos Effect", "Time travel paradox thriller", "Sci-Fi", 2023, 139,
-                8.8, "/thumbnails/chronos-effect.png", Video.VideoType.MOVIE)));
+                8.8, "/thumbnails/chronos-effect.png", "trailer/chronos-effect.mp4", Video.VideoType.MOVIE)));
 
         // Drama Movies
         videos.add(videoRepository.save(new Video("Echoes of Silence", "A musician's journey to redemption", "Drama",
