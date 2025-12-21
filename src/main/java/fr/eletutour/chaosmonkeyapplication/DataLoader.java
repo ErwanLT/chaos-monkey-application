@@ -78,13 +78,13 @@ public class DataLoader implements CommandLineRunner {
 
         // Drama Movies
         videos.add(videoRepository.save(new Video("Echoes of Silence", "A musician's journey to redemption", "Drama",
-                2023, 124, 8.6, "/thumbnails/echoes-silence.jpg", Video.VideoType.MOVIE)));
+                2023, 124, 8.6, "/thumbnails/echoes-silence.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("The Painter's Legacy", "An artist's final masterpiece", "Drama",
-                2022, 118, 8.3, "/thumbnails/painters-legacy.jpg", Video.VideoType.MOVIE)));
+                2022, 118, 8.3, "/thumbnails/painters-legacy.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Broken Bridges", "Family reunion after decades", "Drama", 2021, 112,
-                7.9, "/thumbnails/broken-bridges.jpg", Video.VideoType.MOVIE)));
+                7.9, "/thumbnails/broken-bridges.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Whispers in the Wind", "Love story across generations", "Drama",
-                2023, 128, 8.1, "/thumbnails/whispers-wind.jpg", Video.VideoType.MOVIE)));
+                2023, 128, 8.1, "/thumbnails/whispers-wind.png", Video.VideoType.MOVIE)));
 
         // Comedy Movies
         videos.add(videoRepository.save(new Video("The Mishap", "Everything that can go wrong, does", "Comedy", 2023,
@@ -120,13 +120,13 @@ public class DataLoader implements CommandLineRunner {
 
         // Series - Sci-Fi
         videos.add(videoRepository.save(new Video("Starbound - Season 1", "Interstellar exploration", "Sci-Fi", 2023,
-                520, 9.0, "/thumbnails/starbound.jpg", Video.VideoType.SERIES)));
+                520, 9.0, "/thumbnails/starbound.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("Starbound - Season 2", "New worlds discovered", "Sci-Fi", 2023, 520,
-                9.1, "/thumbnails/starbound-s2.jpg", Video.VideoType.SERIES)));
+                9.1, "/thumbnails/starbound-s2.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("The Expanse: Aftermath", "Post-war space opera", "Sci-Fi", 2022, 450,
-                8.9, "/thumbnails/expanse-aftermath.jpg", Video.VideoType.SERIES)));
+                8.9, "/thumbnails/expanse-aftermath.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("Cyberpunk Chronicles", "Dystopian future noir", "Sci-Fi", 2023, 380,
-                8.6, "/thumbnails/cyberpunk.jpg", Video.VideoType.SERIES)));
+                8.6, "/thumbnails/cyberpunk.png", Video.VideoType.SERIES)));
 
         // Series - Crime
         videos.add(videoRepository.save(new Video("Detective Noir", "Hard-boiled detective stories", "Crime", 2023, 360,
@@ -138,9 +138,9 @@ public class DataLoader implements CommandLineRunner {
 
         // Series - Comedy
         videos.add(videoRepository.save(new Video("The IT Crowd Reboot", "Tech support comedy", "Comedy", 2023, 240,
-                8.1, "/thumbnails/it-crowd.jpg", Video.VideoType.SERIES)));
+                8.1, "/thumbnails/it-crowd.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("Apartment 42", "Roommate shenanigans", "Comedy", 2022, 220, 7.9,
-                "/thumbnails/apartment-42.jpg", Video.VideoType.SERIES)));
+                "/thumbnails/apartment-42.png", Video.VideoType.SERIES)));
 
         // Documentaries
         videos.add(videoRepository.save(new Video("Planet Earth: The Future", "Climate change documentary",
@@ -170,11 +170,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Fantasy
         videos.add(videoRepository.save(new Video("Realm of Dragons", "Epic fantasy adventure", "Fantasy", 2023, 165,
-                8.9, "/thumbnails/realm-dragons.jpg", Video.VideoType.MOVIE)));
+                8.9, "/thumbnails/realm-dragons.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("The Sorcerer's Apprentice Returns", "Magic school adventures",
-                "Fantasy", 2022, 138, 8.2, "/thumbnails/sorcerer.jpg", Video.VideoType.MOVIE)));
+                "Fantasy", 2022, 138, 8.2, "/thumbnails/sorcerer.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Legends of Avalon", "Arthurian legend reimagined", "Fantasy", 2023,
-                520, 9.0, "/thumbnails/avalon.jpg", Video.VideoType.SERIES)));
+                520, 9.0, "/thumbnails/avalon.png", Video.VideoType.SERIES)));
 
         System.out.println("✅ Loaded " + videos.size() + " videos");
         return videos;
