@@ -110,13 +110,13 @@ public class DataLoader implements CommandLineRunner {
 
         // Series - Drama
         videos.add(videoRepository.save(new Video("Crown of Thorns - Season 1", "Medieval power struggle", "Drama",
-                2023, 480, 9.2, "/thumbnails/crown-thorns.jpg", Video.VideoType.SERIES)));
+                2023, 480, 9.2, "/thumbnails/crown-thorns.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("Crown of Thorns - Season 2", "The war continues", "Drama", 2023, 480,
-                9.3, "/thumbnails/crown-thorns-s2.jpg", Video.VideoType.SERIES)));
+                9.3, "/thumbnails/crown-thorns-s2.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("Silicon Valley Dreams", "Tech startup drama", "Drama", 2022, 400,
-                8.5, "/thumbnails/silicon-valley.jpg", Video.VideoType.SERIES)));
+                8.5, "/thumbnails/silicon-valley.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("The Diplomat", "International political intrigue", "Drama", 2023,
-                420, 8.7, "/thumbnails/diplomat.jpg", Video.VideoType.SERIES)));
+                420, 8.7, "/thumbnails/diplomat.png", Video.VideoType.SERIES)));
 
         // Series - Sci-Fi
         videos.add(videoRepository.save(new Video("Starbound - Season 1", "Interstellar exploration", "Sci-Fi", 2023,
@@ -130,11 +130,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Series - Crime
         videos.add(videoRepository.save(new Video("Detective Noir", "Hard-boiled detective stories", "Crime", 2023, 360,
-                8.4, "/thumbnails/detective-noir.jpg", Video.VideoType.SERIES)));
+                8.4, "/thumbnails/detective-noir.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("The Cartel", "Drug empire rise and fall", "Crime", 2022, 480, 8.8,
-                "/thumbnails/cartel.jpg", Video.VideoType.SERIES)));
+                "/thumbnails/cartel.png", Video.VideoType.SERIES)));
         videos.add(videoRepository.save(new Video("White Collar Crimes", "Financial fraud investigation", "Crime", 2023,
-                340, 8.2, "/thumbnails/white-collar.jpg", Video.VideoType.SERIES)));
+                340, 8.2, "/thumbnails/white-collar.png", Video.VideoType.SERIES)));
 
         // Series - Comedy
         videos.add(videoRepository.save(new Video("The IT Crowd Reboot", "Tech support comedy", "Comedy", 2023, 240,
@@ -162,11 +162,11 @@ public class DataLoader implements CommandLineRunner {
 
         // Romance
         videos.add(videoRepository.save(new Video("Love in Paris", "Romantic comedy in France", "Romance", 2023, 108,
-                7.8, "/thumbnails/love-paris.jpg", Video.VideoType.MOVIE)));
+                7.8, "/thumbnails/love-paris.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Second Chances", "Finding love after loss", "Romance", 2022, 115,
-                8.0, "/thumbnails/second-chances.jpg", Video.VideoType.MOVIE)));
+                8.0, "/thumbnails/second-chances.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("The Letter", "Long-distance love story", "Romance", 2023, 102, 7.6,
-                "/thumbnails/letter.jpg", Video.VideoType.MOVIE)));
+                "/thumbnails/letter.png", Video.VideoType.MOVIE)));
 
         // Fantasy
         videos.add(videoRepository.save(new Video("Realm of Dragons", "Epic fantasy adventure", "Fantasy", 2023, 165,
