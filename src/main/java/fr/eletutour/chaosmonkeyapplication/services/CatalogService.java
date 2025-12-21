@@ -33,6 +33,9 @@ public class CatalogService {
     }
 
     public List<Video> searchVideos(String query) {
+        if (query.isBlank()) {
+            return getAllVideos();
+        }
         return videoRepository.findByTitleContainingIgnoreCase(query);
     }
 
