@@ -18,13 +18,16 @@ function openVideoModal(card) {
     const year = card.getAttribute('data-year');
     const duration = card.getAttribute('data-duration') + 'm';
     const thumbnail = card.getAttribute('data-thumbnail');
-    // const rating = card.getAttribute('data-rating'); // Not using it for badge yet
+    const rating = card.getAttribute('data-rating');
+    const genre = card.getAttribute('data-genre');
 
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalDescription').textContent = description;
     document.getElementById('modalYear').textContent = year;
     document.getElementById('modalDuration').textContent = duration;
     document.getElementById('modalHero').style.backgroundImage = `url('${thumbnail}')`;
+    document.getElementById('modalRating').textContent = rating;
+    document.getElementById('modalGenre').textContent = genre;
 
     videoModal.show();
 }

@@ -56,25 +56,25 @@ public class DataLoader implements CommandLineRunner {
 
         // Action Movies
         videos.add(videoRepository.save(new Video("The Dark Sentinel", "A vigilante fights crime in a dystopian city",
-                "Action", 2023, 142, 8.5, "/thumbnails/dark-sentinel.jpg", Video.VideoType.MOVIE)));
+                "Action", 2023, 142, 8.5, "/thumbnails/dark-sentinel.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Velocity", "High-speed chase across continents", "Action", 2022, 118,
-                7.8, "/thumbnails/velocity.jpg", Video.VideoType.MOVIE)));
+                7.8, "/thumbnails/velocity.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Iron Protocol", "Elite soldiers on a dangerous mission", "Action",
-                2021, 135, 8.2, "/thumbnails/iron-protocol.jpg", Video.VideoType.MOVIE)));
+                2021, 135, 8.2, "/thumbnails/iron-protocol.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Rogue Agent", "A spy goes off the grid", "Action", 2023, 128, 7.9,
-                "/thumbnails/rogue-agent.jpg", Video.VideoType.MOVIE)));
+                "/thumbnails/rogue-agent.png", Video.VideoType.MOVIE)));
 
         // Sci-Fi Movies
         videos.add(videoRepository.save(new Video("Quantum Horizon", "Scientists discover parallel universes", "Sci-Fi",
-                2023, 156, 9.1, "/thumbnails/quantum-horizon.jpg", Video.VideoType.MOVIE)));
+                2023, 156, 9.1, "/thumbnails/quantum-horizon.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Nebula Station", "Life on a distant space station", "Sci-Fi", 2022,
-                145, 8.7, "/thumbnails/nebula-station.jpg", Video.VideoType.MOVIE)));
+                145, 8.7, "/thumbnails/nebula-station.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Synthetic Dreams", "AI achieves consciousness", "Sci-Fi", 2021, 132,
-                8.9, "/thumbnails/synthetic-dreams.jpg", Video.VideoType.MOVIE)));
+                8.9, "/thumbnails/synthetic-dreams.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("The Last Colony", "Humanity's final outpost", "Sci-Fi", 2020, 148,
-                8.4, "/thumbnails/last-colony.jpg", Video.VideoType.MOVIE)));
+                8.4, "/thumbnails/last-colony.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Chronos Effect", "Time travel paradox thriller", "Sci-Fi", 2023, 139,
-                8.8, "/thumbnails/chronos-effect.jpg", Video.VideoType.MOVIE)));
+                8.8, "/thumbnails/chronos-effect.png", Video.VideoType.MOVIE)));
 
         // Drama Movies
         videos.add(videoRepository.save(new Video("Echoes of Silence", "A musician's journey to redemption", "Drama",
@@ -88,25 +88,25 @@ public class DataLoader implements CommandLineRunner {
 
         // Comedy Movies
         videos.add(videoRepository.save(new Video("The Mishap", "Everything that can go wrong, does", "Comedy", 2023,
-                98, 7.5, "/thumbnails/mishap.jpg", Video.VideoType.MOVIE)));
+                98, 7.5, "/thumbnails/mishap.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Office Chaos", "Corporate comedy at its finest", "Comedy", 2022, 105,
-                7.8, "/thumbnails/office-chaos.jpg", Video.VideoType.MOVIE)));
+                7.8, "/thumbnails/office-chaos.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Wedding Crashers 2.0", "Digital age wedding disasters", "Comedy",
-                2023, 102, 7.2, "/thumbnails/wedding-crashers.jpg", Video.VideoType.MOVIE)));
+                2023, 102, 7.2, "/thumbnails/wedding-crashers.png", Video.VideoType.MOVIE)));
 
         // Thriller Movies
         videos.add(videoRepository.save(new Video("The Vanishing", "A detective hunts a serial killer", "Thriller",
-                2023, 134, 8.4, "/thumbnails/vanishing.jpg", Video.VideoType.MOVIE)));
+                2023, 134, 8.4, "/thumbnails/vanishing.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Midnight Protocol", "Hacker uncovers conspiracy", "Thriller", 2022,
-                126, 8.1, "/thumbnails/midnight-protocol.jpg", Video.VideoType.MOVIE)));
+                126, 8.1, "/thumbnails/midnight-protocol.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Silent Witness", "Courtroom psychological thriller", "Thriller",
-                2021, 119, 7.9, "/thumbnails/silent-witness.jpg", Video.VideoType.MOVIE)));
+                2021, 119, 7.9, "/thumbnails/silent-witness.png", Video.VideoType.MOVIE)));
 
         // Horror Movies
         videos.add(videoRepository.save(new Video("The Haunting of Blackwood", "Cursed mansion horror", "Horror", 2023,
-                108, 7.6, "/thumbnails/blackwood.jpg", Video.VideoType.MOVIE)));
+                108, 7.6, "/thumbnails/blackwood.png", Video.VideoType.MOVIE)));
         videos.add(videoRepository.save(new Video("Shadows Below", "Underground terror awakens", "Horror", 2022, 95,
-                7.3, "/thumbnails/shadows-below.jpg", Video.VideoType.MOVIE)));
+                7.3, "/thumbnails/shadows-below.png", Video.VideoType.MOVIE)));
 
         // Series - Drama
         videos.add(videoRepository.save(new Video("Crown of Thorns - Season 1", "Medieval power struggle", "Drama",

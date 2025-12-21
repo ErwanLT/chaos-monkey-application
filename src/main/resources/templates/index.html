@@ -60,8 +60,8 @@
                 <button class="btn btn-hero btn-more" th:data-title="${featuredVideo.title}"
                     th:data-description="${featuredVideo.description}" th:data-year="${featuredVideo.releaseYear}"
                     th:data-duration="${featuredVideo.durationMinutes}" th:data-rating="${featuredVideo.rating}"
-                    th:data-thumbnail="${featuredVideo.thumbnailUrl}" onclick="openVideoModal(this)"><i
-                        class="fas fa-info-circle me-2"></i> More Info</button>
+                    th:data-genre="${featuredVideo.genre}" th:data-thumbnail="${featuredVideo.thumbnailUrl}"
+                    onclick="openVideoModal(this)"><i class="fas fa-info-circle me-2"></i> More Info</button>
             </div>
         </div>
     </div>
@@ -85,8 +85,8 @@
                 <div th:each="video : ${popularVideos}" class="video-card" th:data-id="${video.id}"
                     th:data-title="${video.title}" th:data-description="${video.description}"
                     th:data-year="${video.releaseYear}" th:data-duration="${video.durationMinutes}"
-                    th:data-rating="${video.rating}" th:data-thumbnail="${video.thumbnailUrl}"
-                    onclick="openVideoModal(this)">
+                    th:data-rating="${video.rating}" th:data-genre="${video.genre}"
+                    th:data-thumbnail="${video.thumbnailUrl}" onclick="openVideoModal(this)">
                     <img th:src="${video.thumbnailUrl}" alt="Video thumbnail">
                 </div>
             </div>
@@ -99,8 +99,8 @@
                 <div th:each="video : ${topRatedVideos}" class="video-card" th:data-id="${video.id}"
                     th:data-title="${video.title}" th:data-description="${video.description}"
                     th:data-year="${video.releaseYear}" th:data-duration="${video.durationMinutes}"
-                    th:data-rating="${video.rating}" th:data-thumbnail="${video.thumbnailUrl}"
-                    onclick="openVideoModal(this)">
+                    th:data-rating="${video.rating}" th:data-genre="${video.genre}"
+                    th:data-thumbnail="${video.thumbnailUrl}" onclick="openVideoModal(this)">
                     <img th:src="${video.thumbnailUrl}" alt="Video thumbnail">
                 </div>
             </div>
@@ -114,8 +114,8 @@
                 <div th:each="video : ${genreEntry.value}" class="video-card" th:data-id="${video.id}"
                     th:data-title="${video.title}" th:data-description="${video.description}"
                     th:data-year="${video.releaseYear}" th:data-duration="${video.durationMinutes}"
-                    th:data-rating="${video.rating}" th:data-thumbnail="${video.thumbnailUrl}"
-                    onclick="openVideoModal(this)">
+                    th:data-rating="${video.rating}" th:data-genre="${video.genre}"
+                    th:data-thumbnail="${video.thumbnailUrl}" onclick="openVideoModal(this)">
                     <img th:src="${video.thumbnailUrl}" alt="Video thumbnail">
                 </div>
             </div>
@@ -143,7 +143,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="video-meta">
-                                <span class="match-score">98% Match</span>
+                                <span class="match-score" id="modalMatchScore">98% Match</span>
                                 <span class="me-2" id="modalYear">2023</span>
                                 <span class="me-2 badge border" id="modalRating">TV-MA</span>
                                 <span id="modalDuration">2h 14m</span>
@@ -154,9 +154,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="text-white-50">
-                                <p><span class="text-gray">Cast:</span> <span class="text-white">Actor One, Actor
-                                        Two</span></p>
-                                <p><span class="text-gray">Genres:</span> <span class="text-white">Action, Sci-Fi</span>
+                                <p><span class="text-gray">Genre:</span> <span class="text-white"
+                                        id="modalGenre">Action</span>
                                 </p>
                             </div>
                         </div>
