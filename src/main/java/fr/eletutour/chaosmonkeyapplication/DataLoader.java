@@ -150,15 +150,15 @@ public class DataLoader implements CommandLineRunner {
         videos.add(videoRepository.save(new Video("Ocean Depths", "Deep sea exploration", "Documentary", 2022, 120, 9.0,
                 "/thumbnails/ocean-depths.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("Ancient Civilizations", "Lost cities uncovered", "Documentary", 2023,
-                240, 8.9, "/thumbnails/ancient-civs.jpg", Video.VideoType.DOCUMENTARY)));
+                240, 8.9, "/thumbnails/ancient-civs.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("The Space Race 2.0", "Modern space exploration", "Documentary", 2023,
-                110, 8.8, "/thumbnails/space-race.jpg", Video.VideoType.DOCUMENTARY)));
+                110, 8.8, "/thumbnails/space-race.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("Wildlife Warriors", "Conservation heroes", "Documentary", 2022, 85,
-                8.5, "/thumbnails/wildlife-warriors.jpg", Video.VideoType.DOCUMENTARY)));
+                8.5, "/thumbnails/wildlife-warriors.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("The Crypto Phenomenon", "Blockchain revolution", "Documentary", 2023,
-                102, 8.3, "/thumbnails/crypto.jpg", Video.VideoType.DOCUMENTARY)));
+                102, 8.3, "/thumbnails/crypto.png", Video.VideoType.DOCUMENTARY)));
         videos.add(videoRepository.save(new Video("Mind Matters", "Neuroscience breakthroughs", "Documentary", 2023, 95,
-                8.6, "/thumbnails/mind-matters.jpg", Video.VideoType.DOCUMENTARY)));
+                8.6, "/thumbnails/mind-matters.png", Video.VideoType.DOCUMENTARY)));
 
         // Romance
         videos.add(videoRepository.save(new Video("Love in Paris", "Romantic comedy in France", "Romance", 2023, 108,
