@@ -22,6 +22,7 @@ Cette application Spring Boot simule un service de streaming vidéo avec des fon
 - **Spring Data JPA**
 - **H2 Database** (base de données en mémoire)
 - **Chaos Monkey for Spring Boot 2.5.1**
+- **Resilience4j 2.2.0** (bibliothèque de tolérance aux pannes)
 - **Spring Boot Actuator**
 - **SpringDoc OpenAPI 2.8.14** (documentation API avec Swagger UI)
 - **Maven**
@@ -229,6 +230,27 @@ La gestion des utilisateurs doit être résiliente mais peut tolérer des dégra
 - Taux de retry
 - Nombre de sessions abandonnées
 
+## 🛡️ Résilience avec Resilience4j
+
+En complément des tests destructifs de **Chaos Monkey**, l'application intègre **Resilience4j** pour améliorer proactivement sa tolérance aux pannes. Plusieurs mécanismes de résilience ont été mis en place sur les services critiques :
+
+### Stratégies implémentées
+
+- **`RecommendationService` : Circuit Breaker (Coupe-circuit)**
+  - La méthode `generateRecommendations`, complexe et non-bloquante, est protégée par un **Circuit Breaker**.
+  - En cas d'échecs répétés, le circuit s'ouvre et une méthode de **fallback** est appelée, retournant une liste de vidéos populaires. Cela évite de surcharger le service défaillant et assure une dégradation gracieuse de l'expérience.
+
+- **`StreamingService` : Retry (Réessai)**
+  - La méthode `startStream` (critique pour l'utilisateur) est protégée par un **Retry**.
+  - En cas d'erreur passagère (ex: timeout réseau), la tentative est automatiquement rejouée (jusqu'à 3 fois), augmentant les chances de succès sans que l'utilisateur ne perçoive d'erreur.
+
+- **`CatalogService` : Circuit Breaker & Retry**
+  - **Circuit Breaker** sur les méthodes de lecture (`getAllVideos`, `getVideoById`) pour retourner rapidement des données vides si la base de données est indisponible.
+  - **Retry** sur la méthode d'écriture `incrementViewCount` pour garantir que cette opération essentielle soit bien prise en compte malgré des erreurs BDD temporaires.
+
+- **`UserService` : Retry**
+  - Un **Retry** simple est appliqué à la méthode `canAccessPremiumContent` pour la fiabiliser contre les erreurs de lecture en base de données.
+
 ## 💾 Base de données
 
 L'application utilise H2, une base de données en mémoire. La console H2 est accessible à :
@@ -302,6 +324,106 @@ chaos-monkey-application/
    - Latences aléatoires
    - Erreurs intermittentes
    - Résilience de l'application
+
+### Scénarios de test de la résilience
+
+*Note sur la configuration de Chaos Monkey* : Le paramètre `level` définit la fréquence d'attaque (par exemple, `level: 2` signifie qu'une requête sur deux, soit 50%, sera une candidate à l'assaut). Si le paramètre `deterministic` est à `false` (valeur par défaut), l'attaque est probabiliste. S'il est à `true`, l'attaque est déterministe (ex: toutes les 2ème, 4ème requêtes, etc.).
+
+
+Voici comment vérifier le bon fonctionnement des mécanismes de Resilience4j en pilotant Chaos Monkey via son API Actuator.
+
+#### 1. Tester le Circuit Breaker de `RecommendationService`
+
+Ce scénario a pour but de vérifier que le circuit s'ouvre après plusieurs erreurs et que la méthode de fallback est bien appelée.
+
+1.  **Configurer Chaos Monkey pour n'attaquer que les `Services`** via l'API. Cela évite d'impacter les Repositories ou Controllers durant le test.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/watchers' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "service": true,
+        "controller": false,
+        "restController": false,
+        "repository": false,
+        "component": false
+    }'
+    ```
+
+2.  **Configurer l'assaut pour injecter des exceptions**. On active uniquement les assauts par exception.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/assaults' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "level": 2,  // 1 chance sur 2 (50%) d'injecter une exception
+        "latencyActive": false,
+        "exceptionsActive": true,
+        "exception": {
+            "type": "java.io.IOException"
+        }
+    }'
+    ```
+
+3.  **Activer Chaos Monkey**.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/enable'
+    ```
+
+4.  **Appeler l'endpoint de recommandation** à plusieurs reprises.
+    ```bash
+    # Remplacez {userId} par un ID utilisateur valide
+    curl http://localhost:8080/api/recommendations/{userId}
+    ```
+
+5.  **Observer le comportement** :
+    - Les premières requêtes échoueront.
+    - Après quelques échecs, les requêtes suivantes répondront **instantanément** avec une liste de vidéos (le fallback), prouvant que le circuit est ouvert.
+    - L'état du circuit est visible via `GET /actuator/circuitbreakers`.
+
+6.  **Désactiver Chaos Monkey** (`/disable`). Après la durée configurée (`waitDurationInOpenState`), le circuit se fermera et les appels fonctionneront de nouveau.
+
+#### 2. Tester le Retry de `StreamingService`
+
+Ce scénario vérifie que les erreurs temporaires (simulées par de la latence) sont gérées par des nouvelles tentatives.
+
+1.  **Configurer Chaos Monkey pour n'attaquer que les `Services`**.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/watchers' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "service": true,
+        "controller": false,
+        "restController": false,
+        "repository": false,
+        "component": false
+    }'
+    ```
+
+2.  **Configurer l'assaut pour injecter de la latence**. L'objectif est de provoquer un timeout qui déclenchera le `Retry`.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/assaults' \
+    -H 'Content-Type: application/json' \
+    -d '{
+        "level": 2, // 1 chance sur 2 (50%) d'injecter de la latence
+        "latencyActive": true,
+        "latencyRangeStart": 2000,
+        "latencyRangeEnd": 3000,
+        "exceptionsActive": false
+    }'
+    ```
+
+3.  **Activer Chaos Monkey**.
+    ```bash
+    curl -X POST 'http://localhost:8080/actuator/chaosmonkey/enable'
+    ```
+
+4.  **Appeler l'endpoint de streaming** :
+    ```bash
+    curl -X POST http://localhost:8080/api/streaming/start \
+      -H "Content-Type: application/json" \
+      -d '{"userId": 1, "videoId": 1}'
+    ```
+
+5.  **Observer les logs de l'application**. Vous devriez voir des logs indiquant une nouvelle tentative (`Retrying execution...`). La requête prendra plus de temps mais devrait finir par aboutir.
 
 ## 📝 Licence
 

@@ -6,13 +6,18 @@ import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.RecommendationRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class RecommendationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(RecommendationService.class);
 
     private final RecommendationRepository recommendationRepository;
     private final WatchHistoryRepository watchHistoryRepository;
@@ -34,6 +39,7 @@ public class RecommendationService {
         return videoRepository.findTop10ByOrderByViewCountDesc();
     }
 
+    @CircuitBreaker(name = "recommendationServiceCB", fallbackMethod = "generateRecommendationsFallback")
     public void generateRecommendations(Long userId) {
         // Get user's watch history
         List<WatchHistory> history = watchHistoryRepository.findByUserId(userId);
@@ -72,9 +78,7 @@ public class RecommendationService {
     }
 
     private void generatePopularRecommendations(Long userId) {
-        List<Video> popular = videoRepository.findTop10ByOrderByViewCountDesc();
-
-        for (Video video : popular) {
+        for (Video video : videoRepository.findTop10ByOrderByViewCountDesc()) {
             Recommendation rec = new Recommendation(
                     userId,
                     video.getId(),
@@ -82,5 +86,11 @@ public class RecommendationService {
                     "Trending now");
             recommendationRepository.save(rec);
         }
+    }
+
+    // Fallback method for generateRecommendations
+    private void generateRecommendationsFallback(Long userId, Throwable t) {
+        logger.error("Error generating recommendations for user {}. Falling back to popular recommendations. Error: {}", userId, t.getMessage());
+        generatePopularRecommendations(userId);
     }
 }

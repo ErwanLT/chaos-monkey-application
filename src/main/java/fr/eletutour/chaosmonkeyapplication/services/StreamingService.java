@@ -2,6 +2,7 @@ package fr.eletutour.chaosmonkeyapplication.services;
 
 import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class StreamingService {
         this.catalogService = catalogService;
     }
 
+    @Retry(name = "streamingServiceRetry")
     public Map<String, Object> startStream(Long userId, Long videoId) {
         // Simulate stream initialization
         Map<String, Object> streamInfo = new HashMap<>();

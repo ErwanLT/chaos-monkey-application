@@ -2,6 +2,7 @@ package fr.eletutour.chaosmonkeyapplication.services;
 
 import fr.eletutour.chaosmonkeyapplication.models.User;
 import fr.eletutour.chaosmonkeyapplication.repositories.UserRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Retry(name = "userServiceRetry")
     public boolean canAccessPremiumContent(Long userId) {
         Optional<User> userOpt = userRepository.findById(userId);
         return userOpt.map(user -> user.getSubscriptionType() == User.SubscriptionType.PREMIUM).orElse(false);
