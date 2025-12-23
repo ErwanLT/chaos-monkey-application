@@ -9,90 +9,85 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.eletutour</groupId>
-    <artifactId>chaos-monkey-application</artifactId>
+    <artifactId>chaos-monkey-project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>chaos-monkey-application</name>
-    <description>chaos-monkey-application</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <packaging>pom</packaging>
+    <name>chaos-monkey-project</name>
+    <description>Chaos Monkey Project Parent</description>
+
+    <modules>
+        <module>chaos-monkey-app</module>
+        <module>gatling-tests</module>
+    </modules>
+
     <properties>
         <java.version>21</java.version>
         <resilience4jVersion>2.2.0</resilience4jVersion>
+        <chaos-monkey.version>3.2.2</chaos-monkey.version>
+        <springdoc.version>2.8.14</springdoc.version>
+        <gatling.version>3.11.3</gatling.version>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>chaos-monkey-spring-boot</artifactId>
-            <version>3.2.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.14</version>
-        </dependency>
 
-        <!-- Resilience4j -->
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-all</artifactId>
-            <version>${resilience4jVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.resilience4j</groupId>
-            <artifactId>resilience4j-spring-boot3</artifactId>
-            <version>${resilience4jVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+            <!-- Third Party -->
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>chaos-monkey-spring-boot</artifactId>
+                <version>${chaos-monkey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-all</artifactId>
+                <version>${resilience4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot3</artifactId>
+                <version>${resilience4jVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            
+            <!-- Gatling -->
+             <dependency>
+                <groupId>io.gatling.highcharts</groupId>
+                <artifactId>gatling-charts-highcharts</artifactId>
+                <version>${gatling.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-test-framework</artifactId>
+                <version>${gatling.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                 <plugin>
+                    <groupId>io.gatling</groupId>
+                    <artifactId>gatling-maven-plugin</artifactId>
+                    <version>${gatling.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
