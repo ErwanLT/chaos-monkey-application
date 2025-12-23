@@ -1,4 +1,4 @@
-package fr.eletutour.chaosmonkeyapplication.controllers;
+package fr.eletutour.chaosmonkeyapplication.controllers.api;
 
 import fr.eletutour.chaosmonkeyapplication.models.Recommendation;
 import fr.eletutour.chaosmonkeyapplication.models.Video;

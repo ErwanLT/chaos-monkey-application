@@ -17,8 +17,8 @@ Cette application Spring Boot simule un service de streaming vidéo avec des fon
 
 ## 🛠️ Technologies utilisées
 
-- **Java 17**
-- **Spring Boot 2.5.15**
+- **Java 21**
+- **Spring Boot 3.5.5**
 - **Spring Data JPA**
 - **H2 Database** (base de données en mémoire)
 - **Chaos Monkey for Spring Boot 2.5.1**
