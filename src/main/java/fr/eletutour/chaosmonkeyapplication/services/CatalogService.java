@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.services;
 
+import fr.eletutour.chaosmonkeyapplication.exception.CatalogException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,6 @@ public class CatalogService {
             video.setViewCount(video.getViewCount() + 1);
             return videoRepository.save(video);
         }
-        return null;
+        throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + videoId);
     }
 }

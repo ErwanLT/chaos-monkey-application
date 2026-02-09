@@ -1,7 +1,11 @@
 package fr.eletutour.chaosmonkeyapplication;
 
-import fr.eletutour.chaosmonkeyapplication.models.*;
-import fr.eletutour.chaosmonkeyapplication.repositories.*;
+import fr.eletutour.chaosmonkeyapplication.models.User;
+import fr.eletutour.chaosmonkeyapplication.models.Video;
+import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
+import fr.eletutour.chaosmonkeyapplication.repositories.UserRepository;
+import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
+import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import fr.eletutour.chaosmonkeyapplication.services.RecommendationService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

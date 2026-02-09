@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.services;
 
+import fr.eletutour.chaosmonkeyapplication.exception.UserException;
 import fr.eletutour.chaosmonkeyapplication.models.User;
 import fr.eletutour.chaosmonkeyapplication.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,10 @@ public class UserService {
         Optional<User> userOpt = userRepository.findById(userId);
         return userOpt.map(user -> user.getSubscriptionType() == User.SubscriptionType.STANDARD ||
                 user.getSubscriptionType() == User.SubscriptionType.PREMIUM).orElse(false);
+    }
+
+    public User getUserOrThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserException(UserException.UserError.USER_NOT_FOUND, "id=" + id));
     }
 }
