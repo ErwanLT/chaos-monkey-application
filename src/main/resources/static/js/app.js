@@ -31,7 +31,8 @@ function openVideoModal(card) {
         thumbnail: card.getAttribute('data-thumbnail'),
         rating: card.getAttribute('data-rating'),
         genre: card.getAttribute('data-genre'),
-        trailer: card.getAttribute('data-trailer') // Path: /videos/trailer.mp4
+        trailer: card.getAttribute('data-trailer'), // Path: /videos/trailer.mp4
+        cast: card.getAttribute('data-cast') || 'Non disponible'
     };
 
     // Mise à jour des textes de la modale
@@ -41,6 +42,17 @@ function openVideoModal(card) {
     document.getElementById('modalDuration').textContent = data.duration;
     document.getElementById('modalRating').textContent = data.rating;
     document.getElementById('modalGenre').textContent = data.genre;
+    document.getElementById('modalCast').textContent = data.cast;
+
+    // Détermination de l'ambiance (mood) en fonction du genre
+    let mood = "Captivant, Sombre, Intense";
+    if (data.genre === "Sci-Fi") mood = "Visionnaire, Captivant, Cérébral";
+    else if (data.genre === "Action") mood = "Adrénaline, Excitation, Spectacle";
+    else if (data.genre === "Comedy") mood = "Drôle, Léger, Déjanté";
+    else if (data.genre === "Horror") mood = "Effrayant, Sombre, Angoissant";
+    else if (data.genre === "Romance") mood = "Émouvant, Sentimental, Intime";
+
+    document.getElementById('modalMood').textContent = mood;
 
     // Gestion du Trailer vs Image
     if (data.trailer && data.trailer !== 'null' && data.trailer !== '') {
