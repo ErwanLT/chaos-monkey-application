@@ -14,115 +14,166 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/" style="color: #E50914; font-weight: bold; letter-spacing: 2px; font-size: 2.5em; font-family: Bebas Neue, sans-serif">CHAOSFLIX</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/series">Series</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/movies">Movies</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="/new-popular">New & Popular</a></li>
-            </ul>
-            <div class="d-flex text-white align-items-center">
-                <form action="/search" method="get" class="d-flex me-3">
-                    <input class="form-control me-2 bg-dark text-white border-0" type="search" name="q" placeholder="Search" style="background-color: rgba(0,0,0,0.5) !important;">
-                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
-                </form>
-                <i class="fas fa-bell me-3"></i>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="User" style="height: 30px; border-radius: 4px;">
-            </div>
-        </div>
-    </div>
-</nav>
-
-<div class="hero" th:if="${featuredVideo != null}"
-     th:style="'background-image: linear-gradient(to bottom, rgba(0,0,0,0) 60%, #141414 100%), url(' + ${featuredVideo.thumbnailUrl} + '); background-size: cover; background-position: center;'">
-    <div class="hero-content">
-        <h1 class="hero-title" th:text="${featuredVideo.title}">Welcome to Chaos</h1>
-        <p class="hero-description" th:text="${featuredVideo.description}">Experience the unpredictable.</p>
-        <div class="d-flex">
-            <button class="btn btn-light btn-lg me-2 px-4 py-2 fw-bold"><i class="fas fa-play me-2"></i> Play</button>
-            <button class="btn btn-secondary btn-lg px-4 py-2 fw-bold"
-                    th:data-title="${featuredVideo.title}"
-                    th:data-description="${featuredVideo.description}"
-                    th:data-year="${featuredVideo.releaseYear}"
-                    th:data-duration="${featuredVideo.durationMinutes}"
-                    th:data-rating="${featuredVideo.rating}"
-                    th:data-genre="${featuredVideo.genre}"
-                    th:data-thumbnail="${featuredVideo.thumbnailUrl}"
-                    th:data-trailer="${featuredVideo.trailerUrl}"
-                    onclick="openVideoModal(this)">
-                <i class="fas fa-info-circle me-2"></i> More Info
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"
+                style="color: #E50914; font-weight: bold; letter-spacing: 2px; font-size: 2.5em; font-family: Bebas Neue, sans-serif">CHAOSFLIX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid content-container mt-n5">
-    <div th:each="genreEntry : ${genres}" class="genre-row mb-4">
-        <h2 class="genre-title text-white ps-4 mb-3" th:text="${genreEntry.key}">Genre Title</h2>
-        <div class="video-scroller d-flex overflow-auto ps-4">
-            <div th:each="video : ${genreEntry.value}" class="video-card flex-shrink-0 me-2"
-                 th:data-id="${video.id}"
-                 th:data-title="${video.title}"
-                 th:data-description="${video.description}"
-                 th:data-year="${video.releaseYear}"
-                 th:data-duration="${video.durationMinutes}"
-                 th:data-rating="${video.rating}"
-                 th:data-genre="${video.genre}"
-                 th:data-thumbnail="${video.thumbnailUrl}"
-                 th:data-trailer="${video.trailerUrl}"
-                 onclick="openVideoModal(this)"
-                 style="cursor: pointer; width: 250px;">
-                <img th:src="${video.thumbnailUrl}" alt="Thumbnail" class="img-fluid rounded shadow-sm">
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content bg-dark text-white border-0">
-            <div class="modal-header border-0 position-absolute w-100 p-3" style="z-index: 10;">
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-hero position-relative" id="modalHero" style="height: 400px; background-size: cover; background-position: center;">
-                <video id="modalVideoPlayer" width="100%" height="100%" autoplay muted loop style="display:none; object-fit: cover;">
-                    <source src="" type="video/mp4">
-                </video>
-                <div class="modal-hero-overlay position-absolute bottom-0 start-0 w-100 p-4"
-                     style="background: linear-gradient(to top, #141414, transparent);">
-                    <h2 id="modalTitle" class="fw-bold mb-3">Title</h2>
-                    <button class="btn btn-light px-4 py-2 fw-bold"><i class="fas fa-play me-2"></i> Play Now</button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/series">Series</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/movies">Movies</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="/new-popular">New & Popular</a></li>
+                </ul>
+                <div class="d-flex text-white align-items-center">
+                    <form action="/search" method="get" class="d-flex me-3">
+                        <input class="form-control me-2 bg-dark text-white border-0" type="search" name="q"
+                            placeholder="Search" style="background-color: rgba(0,0,0,0.5) !important;">
+                        <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                    <i class="fas fa-bell me-3"></i>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="User"
+                        style="height: 30px; border-radius: 4px;">
                 </div>
             </div>
+        </div>
+    </nav>
 
-            <div class="modal-body p-4">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="video-meta mb-3">
-                            <span class="text-success fw-bold me-2">98% Match</span>
-                            <span class="me-2" id="modalYear">2023</span>
-                            <span class="me-2 badge border" id="modalRating">TV-MA</span>
-                            <span id="modalDuration">2h 14m</span>
+    <div class="hero" th:if="${featuredVideo != null}"
+        th:style="'background-image: linear-gradient(to bottom, rgba(0,0,0,0) 60%, #141414 100%), url(' + ${featuredVideo.thumbnailUrl} + '); background-size: cover; background-position: center;'">
+        <div class="hero-content">
+            <h1 class="hero-title" th:text="${featuredVideo.title}">Welcome to Chaos</h1>
+            <p class="hero-description" th:text="${featuredVideo.description}">Experience the unpredictable.</p>
+            <div class="d-flex">
+                <button class="btn btn-light btn-lg me-2 px-4 py-2 fw-bold"><i class="fas fa-play me-2"></i>
+                    Play</button>
+                <button class="btn btn-secondary btn-lg px-4 py-2 fw-bold" th:data-title="${featuredVideo.title}"
+                    th:data-description="${featuredVideo.description}" th:data-year="${featuredVideo.releaseYear}"
+                    th:data-duration="${featuredVideo.durationMinutes}" th:data-rating="${featuredVideo.rating}"
+                    th:data-genre="${featuredVideo.genre}" th:data-thumbnail="${featuredVideo.thumbnailUrl}"
+                    th:data-trailer="${featuredVideo.trailerUrl}" onclick="openVideoModal(this)">
+                    <i class="fas fa-info-circle me-2"></i> More Info
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid content-container mt-n5">
+        <div th:each="genreEntry : ${genres}" class="genre-row mb-4">
+            <h2 class="genre-title text-white ps-4 mb-3" th:text="${genreEntry.key}">Genre Title</h2>
+            <div class="video-scroller d-flex overflow-auto ps-4">
+                <div th:each="video : ${genreEntry.value}" class="video-card flex-shrink-0 me-2"
+                    th:data-id="${video.id}" th:data-title="${video.title}" th:data-description="${video.description}"
+                    th:data-year="${video.releaseYear}" th:data-duration="${video.durationMinutes}"
+                    th:data-rating="${video.rating}" th:data-genre="${video.genre}"
+                    th:data-thumbnail="${video.thumbnailUrl}" th:data-trailer="${video.trailerUrl}"
+                    th:data-cast="${video.casting}" onclick="openVideoModal(this)"
+                    style="cursor: pointer; width: 250px;">
+                    <img th:src="${video.thumbnailUrl}" alt="Thumbnail" class="img-fluid rounded shadow-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div th:if="${genres != null and !genres.isEmpty() and genres.values().iterator().next().isEmpty()}"
+            class="text-center py-5 my-5">
+            <div class="no-results-container">
+                <i class="fas fa-search fa-4x mb-4" style="color: #999;"></i>
+                <h2 class="text-white mb-3">Aucun résultat trouvé</h2>
+                <p class="fs-5 mb-2" style="color: #d0d0d0;">Nous n'avons pas trouvé de vidéos correspondant à votre
+                    recherche.</p>
+                <p class="mb-4" style="color: #b3b3b3;">Essayez avec d'autres mots-clés ou parcourez notre catalogue.
+                </p>
+                <a href="/" class="btn btn-outline-light mt-3 px-4 py-2">
+                    <i class="fas fa-home me-2"></i>Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-dark text-white border-0 overflow-hidden">
+                <div class="modal-header border-0 position-absolute w-100 p-3" style="z-index: 100;">
+                    <button type="button" class="btn btn-dark rounded-circle ms-auto p-2" data-bs-dismiss="modal"
+                        aria-label="Close"
+                        style="width: 40px; height: 40px; background-color: rgba(0,0,0,0.7); border: 2px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-times text-white"></i>
+                    </button>
+                </div>
+
+                <div class="modal-hero position-relative" id="modalHero">
+                    <video id="modalVideoPlayer" width="100%" height="100%" autoplay muted loop
+                        style="display:none; object-fit: cover;">
+                        <source src="" type="video/mp4">
+                    </video>
+                    <div class="modal-hero-overlay"></div>
+
+                    <div class="modal-hero-content p-5">
+                        <h2 id="modalTitle" class="modal-title-text mb-4">Title</h2>
+                        <div class="d-flex align-items-center gap-3">
+                            <button class="btn btn-light btn-lg px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                                <i class="fas fa-play"></i> Lecture
+                            </button>
+                            <button
+                                class="btn rounded-circle border-white border-2 text-white p-2 d-flex align-items-center justify-content-center"
+                                style="width: 45px; height: 45px; background: rgba(30, 30, 30, 0.5);">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button
+                                class="btn rounded-circle border-white border-2 text-white p-2 d-flex align-items-center justify-content-center"
+                                style="width: 45px; height: 45px; background: rgba(30, 30, 30, 0.5);">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <div class="ms-auto">
+                                <button
+                                    class="btn rounded-circle border-white border-1 text-white p-2 d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px; background: rgba(0, 0, 0, 0.3);">
+                                    <i class="fas fa-volume-mute"></i>
+                                </button>
+                            </div>
                         </div>
-                        <p class="video-description text-secondary" id="modalDescription">Description...</p>
                     </div>
-                    <div class="col-md-4">
-                        <p class="small mb-1"><span class="text-secondary">Genre:</span> <span id="modalGenre">Action</span></p>
+                </div>
+
+                <div class="modal-body p-5 pt-4">
+                    <div class="row gx-5">
+                        <div class="col-md-8">
+                            <div class="video-meta d-flex align-items-center gap-3 mb-4">
+                                <span class="text-success fw-bold">98% Match</span>
+                                <span id="modalYear">2023</span>
+                                <span class="badge border border-secondary" id="modalRating">16+</span>
+                                <span id="modalDuration">2h 14m</span>
+                                <span class="badge border border-secondary">HD</span>
+                            </div>
+                            <p class="video-description text-white opacity-75 mb-0" id="modalDescription">Description...
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <span class="text-secondary small">Distribution :</span>
+                                <span id="modalCast" class="small text-white">Cast list...</span>
+                            </div>
+                            <div class="mb-3">
+                                <span class="text-secondary small">Genres :</span>
+                                <span id="modalGenre" class="small text-white">Action</span>
+                            </div>
+                            <div>
+                                <span class="text-secondary small">Ce film est :</span>
+                                <span id="modalMood" class="small text-white">À suspense, Sombre, Captivant</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/app.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/app.js}"></script>
 </body>
+
 </html>
