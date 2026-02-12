@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.concurrent.TimeoutException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -56,6 +57,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         if (errorCode != null) {
             problemDetail.setProperty("errorCode", errorCode);
         }
+        return problemDetail;
+    }
+
+    @ExceptionHandler({ TimeoutException.class, RequestTimeoutException.class }) // Gère le timeout natif ou custom
+    public Object handleTimeoutException(Exception e, jakarta.servlet.http.HttpServletRequest request) {
+        String acceptHeader = request.getHeader("Accept");
+
+        // Si la requête vient d'un navigateur (HTML), on renvoie vers la page d'erreur
+        // statique
+        if (acceptHeader != null && acceptHeader.contains("text/html")) {
+            org.springframework.web.servlet.ModelAndView mav = new org.springframework.web.servlet.ModelAndView();
+            mav.setViewName("forward:/errors/timeout.html");
+            mav.setStatus(HttpStatus.SERVICE_UNAVAILABLE);
+            return mav;
+        }
+
+        // Sinon (API/JSON), on renvoie un ProblemDetail
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.SERVICE_UNAVAILABLE, // 503 Service Unavailable
+                "Le traitement de la requête a dépassé le délai imparti (Timeout).");
+
+        problemDetail.setTitle("Service Timeout");
+        problemDetail.setType(URI.create("http://localhost:8080/errors/timeout.html"));
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("errorCode", "TIMEOUT_ERROR");
+
         return problemDetail;
     }
 }
