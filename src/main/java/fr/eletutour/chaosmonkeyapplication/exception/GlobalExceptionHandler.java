@@ -16,32 +16,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleChaosMonkeyApplicationException(ChaosMonkeyApplicationException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         String title = "Application Error";
-        URI type = URI.create("https://chaosflix.com/errors/application-error");
+        URI type = URI.create("http://localhost:8080/errors/application-error.html");
         String errorCode = null;
 
         switch (e) {
             case CatalogException ce -> {
                 status = HttpStatus.valueOf(ce.getError().getStatus());
                 title = "Catalog Error";
-                type = URI.create("https://chaosflix.com/errors/catalog-error");
+                type = URI.create("http://localhost:8080/errors/catalog-error.html");
                 errorCode = ce.getError().name();
             }
             case UserException ue -> {
                 status = HttpStatus.valueOf(ue.getError().getStatus());
                 title = "User Error";
-                type = URI.create("https://chaosflix.com/errors/user-error");
+                type = URI.create("http://localhost:8080/errors/user-error.html");
                 errorCode = ue.getError().name();
             }
             case StreamingException se -> {
                 status = HttpStatus.valueOf(se.getError().getStatus());
                 title = "Streaming Error";
-                type = URI.create("https://chaosflix.com/errors/streaming-error");
+                type = URI.create("http://localhost:8080/errors/streaming-error.html");
                 errorCode = se.getError().name();
             }
             case RecommendationException re -> {
                 status = HttpStatus.valueOf(re.getError().getStatus());
                 title = "Recommendation Error";
-                type = URI.create("https://chaosflix.com/errors/recommendation-error");
+                type = URI.create("http://localhost:8080/errors/recommendation-error.html");
                 errorCode = re.getError().name();
             }
             default -> {
