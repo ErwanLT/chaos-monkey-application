@@ -32,6 +32,9 @@ public class Video {
 
     private Integer viewCount;
 
+    @Column(name = "casting", length = 1000)
+    private String casting;
+
     public Video() {
     }
 
@@ -49,9 +52,16 @@ public class Video {
     }
 
     public Video(String title, String description, String genre, Integer releaseYear,
-                 Integer durationMinutes, Double rating, String thumbnailUrl, String trailerUrl, VideoType type) {
+            Integer durationMinutes, Double rating, String thumbnailUrl, String trailerUrl, VideoType type) {
         this(title, description, genre, releaseYear, durationMinutes, rating, thumbnailUrl, type);
         this.trailerUrl = trailerUrl;
+    }
+
+    public Video(String title, String description, String genre, Integer releaseYear,
+            Integer durationMinutes, Double rating, String thumbnailUrl, String trailerUrl, String casting,
+            VideoType type) {
+        this(title, description, genre, releaseYear, durationMinutes, rating, thumbnailUrl, trailerUrl, type);
+        this.casting = casting;
     }
 
     // Getters and Setters
@@ -141,6 +151,14 @@ public class Video {
 
     public void setTrailerUrl(String trailerUrl) {
         this.trailerUrl = trailerUrl;
+    }
+
+    public String getCasting() {
+        return casting;
+    }
+
+    public void setCasting(String casting) {
+        this.casting = casting;
     }
 
     public enum VideoType {

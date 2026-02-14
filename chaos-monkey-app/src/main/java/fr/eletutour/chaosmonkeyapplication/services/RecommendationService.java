@@ -1,17 +1,22 @@
 package fr.eletutour.chaosmonkeyapplication.services;
 
+import fr.eletutour.chaosmonkeyapplication.exception.RecommendationException;
+import fr.eletutour.chaosmonkeyapplication.exception.UserException;
 import fr.eletutour.chaosmonkeyapplication.models.Recommendation;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.RecommendationRepository;
-import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,13 +27,16 @@ public class RecommendationService {
     private final RecommendationRepository recommendationRepository;
     private final WatchHistoryRepository watchHistoryRepository;
     private final VideoRepository videoRepository;
+    private final UserService userService;
 
     public RecommendationService(RecommendationRepository recommendationRepository,
             WatchHistoryRepository watchHistoryRepository,
-            VideoRepository videoRepository) {
+            VideoRepository videoRepository,
+            UserService userService) {
         this.recommendationRepository = recommendationRepository;
         this.watchHistoryRepository = watchHistoryRepository;
         this.videoRepository = videoRepository;
+        this.userService = userService;
     }
 
     public List<Recommendation> getRecommendationsForUser(Long userId) {
@@ -41,39 +49,49 @@ public class RecommendationService {
 
     @CircuitBreaker(name = "recommendationServiceCB", fallbackMethod = "generateRecommendationsFallback")
     public void generateRecommendations(Long userId) {
-        // Get user's watch history
-        List<WatchHistory> history = watchHistoryRepository.findByUserId(userId);
+        try {
+            // Validate user
+            userService.getUserOrThrow(userId);
 
-        if (history.isEmpty()) {
-            // New user - recommend popular content
-            generatePopularRecommendations(userId);
-            return;
-        }
+            // Get user's watch history
+            List<WatchHistory> history = watchHistoryRepository.findByUserId(userId);
 
-        // Get genres from watched videos
-        Set<String> watchedGenres = new HashSet<>();
-        Set<Long> watchedVideoIds = new HashSet<>();
+            if (history.isEmpty()) {
+                // New user - recommend popular content
+                generatePopularRecommendations(userId);
+                return;
+            }
 
-        for (WatchHistory wh : history) {
-            watchedVideoIds.add(wh.getVideoId());
-            videoRepository.findById(wh.getVideoId()).ifPresent(video -> watchedGenres.add(video.getGenre()));
-        }
+            // Get genres from watched videos
+            Set<String> watchedGenres = new HashSet<>();
+            Set<Long> watchedVideoIds = new HashSet<>();
 
-        // Find videos in same genres
-        List<Video> allVideos = videoRepository.findAll();
-        List<Video> candidates = allVideos.stream()
-                .filter(v -> !watchedVideoIds.contains(v.getId()))
-                .filter(v -> watchedGenres.contains(v.getGenre()))
-                .collect(Collectors.toList());
+            for (WatchHistory wh : history) {
+                watchedVideoIds.add(wh.getVideoId());
+                videoRepository.findById(wh.getVideoId()).ifPresent(video -> watchedGenres.add(video.getGenre()));
+            }
 
-        // Create recommendations with scores
-        Random random = new Random();
-        for (Video video : candidates.subList(0, Math.min(10, candidates.size()))) {
-            double score = 0.7 + (random.nextDouble() * 0.3); // 0.7 to 1.0
-            String reason = "Because you watched " + watchedGenres.iterator().next() + " content";
+            // Find videos in same genres
+            List<Video> allVideos = videoRepository.findAll();
+            List<Video> candidates = allVideos.stream()
+                    .filter(v -> !watchedVideoIds.contains(v.getId()))
+                    .filter(v -> watchedGenres.contains(v.getGenre()))
+                    .collect(Collectors.toList());
 
-            Recommendation rec = new Recommendation(userId, video.getId(), score, reason);
-            recommendationRepository.save(rec);
+            // Create recommendations with scores
+            Random random = new Random();
+            for (Video video : candidates.subList(0, Math.min(10, candidates.size()))) {
+                double score = 0.7 + (random.nextDouble() * 0.3); // 0.7 to 1.0
+                String reason = "Because you watched " + watchedGenres.iterator().next() + " content";
+
+                Recommendation rec = new Recommendation(userId, video.getId(), score, reason);
+                recommendationRepository.save(rec);
+            }
+        } catch (UserException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RecommendationException(RecommendationException.RecommendationError.GENERATION_FAILED,
+                    e.getMessage());
         }
     }
 
