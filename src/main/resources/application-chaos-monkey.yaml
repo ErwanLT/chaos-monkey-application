@@ -1,0 +1,15 @@
+springdoc:
+  show-actuator: true
+  packages-to-scan:
+    - fr.eletutour
+    - org.springframework.boot
+    - de.codecentric.spring
+
+management:
+  endpoint:
+    chaosmonkey:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: chaosmonkey

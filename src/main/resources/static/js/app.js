@@ -36,6 +36,7 @@ function openVideoModal(card) {
     };
 
     // Mise à jour des textes de la modale
+    document.getElementById('modalMatch').textContent = Math.floor(Math.random() * 100)+"%";
     document.getElementById('modalTitle').textContent = data.title;
     document.getElementById('modalDescription').textContent = data.description;
     document.getElementById('modalYear').textContent = data.year;
