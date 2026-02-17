@@ -35,6 +35,8 @@ public class Video {
     @Column(name = "casting", length = 1000)
     private String casting;
 
+    private String section; // e.g. "Disney", "Pixar", "Marvel", "Star Wars", "National Geographic"
+
     public Video() {
     }
 
@@ -62,6 +64,14 @@ public class Video {
             VideoType type) {
         this(title, description, genre, releaseYear, durationMinutes, rating, thumbnailUrl, trailerUrl, type);
         this.casting = casting;
+    }
+
+    public Video(String title, String description, String genre, Integer releaseYear,
+            Integer durationMinutes, Double rating, String thumbnailUrl, String trailerUrl, String casting,
+            String section,
+            VideoType type) {
+        this(title, description, genre, releaseYear, durationMinutes, rating, thumbnailUrl, trailerUrl, casting, type);
+        this.section = section;
     }
 
     // Getters and Setters
@@ -159,6 +169,14 @@ public class Video {
 
     public void setCasting(String casting) {
         this.casting = casting;
+    }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
     }
 
     public enum VideoType {

@@ -24,9 +24,11 @@ public class HomeController {
     private final CatalogService catalogService;
     private final UIConfiguration uiConfiguration;
 
-    public HomeController(CatalogService catalogService, UIConfiguration uiConfiguration) {
+    public HomeController(CatalogService catalogService, UIConfiguration uiConfiguration,
+            fr.eletutour.chaosmonkeyapplication.services.SectionService sectionService) {
         this.catalogService = catalogService;
         this.uiConfiguration = uiConfiguration;
+        this.sectionService = sectionService;
     }
 
     /**
@@ -175,6 +177,23 @@ public class HomeController {
         Video featuredVideo = searchResults.isEmpty() ? null : searchResults.get(0);
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Search Results for '" + query + "'", searchResults));
+
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
+        return "index";
+    }
+
+    private final fr.eletutour.chaosmonkeyapplication.services.SectionService sectionService;
+
+    @GetMapping("/section")
+    public String section(@RequestParam("name") String name, Model model) {
+        log.info(">>> [SECTION] Entrée dans la méthode section() pour '{}'", name);
+        List<Video> sectionVideos = executeWithTimeout("SECTION-TASK", () -> sectionService.getVideosBySection(name));
+
+        Video featuredVideo = sectionVideos.isEmpty() ? null : sectionVideos.get(0);
+        model.addAttribute("featuredVideo", featuredVideo);
+        model.addAttribute("genres", Collections.singletonMap(name + " Universe", sectionVideos));
 
         if ("v2".equals(uiConfiguration.getUiVersion())) {
             return "index_v2";
