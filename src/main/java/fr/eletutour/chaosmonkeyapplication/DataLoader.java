@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication;
 
+import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
 import fr.eletutour.chaosmonkeyapplication.models.User;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
@@ -21,23 +22,32 @@ public class DataLoader implements CommandLineRunner {
     private final UserRepository userRepository;
     private final WatchHistoryRepository watchHistoryRepository;
     private final RecommendationService recommendationService;
+    private final UIConfiguration uiConfiguration;
 
     public DataLoader(VideoRepository videoRepository,
             UserRepository userRepository,
             WatchHistoryRepository watchHistoryRepository,
-            RecommendationService recommendationService) {
+            RecommendationService recommendationService,
+            UIConfiguration uiConfiguration) {
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
         this.watchHistoryRepository = watchHistoryRepository;
         this.recommendationService = recommendationService;
+        this.uiConfiguration = uiConfiguration;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("🎬 Loading Netflix-like streaming data...");
+        System.out.println("🎬 Loading streaming data...");
 
-        // Load Videos
-        List<Video> videos = loadVideos();
+        List<Video> videos;
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            System.out.println(" DISNEY+ MODE: Loading Disney/Tech themed data");
+            videos = loadDisneyTechVideos();
+        } else {
+            System.out.println(" NETFLIX MODE: Loading Netflix-like streaming data");
+            videos = loadVideos();
+        }
 
         // Load Users
         List<User> users = loadUsers();
@@ -53,6 +63,109 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("✅ Streaming service data loaded successfully!");
         System.out.println("📊 Total Videos: " + videos.size());
         System.out.println("👥 Total Users: " + users.size());
+    }
+
+    private List<Video> loadDisneyTechVideos() {
+        List<Video> videos = new ArrayList<>();
+
+        videos.add(videoRepository.save(new Video("1001 Bugs",
+                "Une colonie de scripts lutte contre un gang de malwares extorqueurs.",
+                "Animation", 2023, 95, 8.1, "/thumbnails/disney/1001-bugs.png", null,
+                "Flik Flak, Princess Atta-octet, Hopper.exe", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Garbage Collector",
+                "Dans un futur lointain, un robot de garbage collection de données solitaire trouve un sens à sa vie.",
+                "Animation", 2008, 98, 9.3, "/thumbnails/disney/garbage-collector.png", null,
+                "WALL-E, EVE-lyn, AUTO-pilot", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Finding `nemo.dat`",
+                "Un parent parcourt l'océan de données pour retrouver son fichier fils perdu.",
+                "Animation", 2003, 100, 8.9, "/thumbnails/disney/nemo.png", null,
+                "Marlin.sh, Dory.mem, Nemo.dat", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("The Incredibles: Super-Coders",
+                "Une famille de programmeurs aux talents extraordinaires est forcée de cacher ses compétences.",
+                "Animation", 2004, 115, 8.7, "/thumbnails/disney/sup-coders.png", null,
+                "Mr. Compilable, Elastigirl-IDE, Dash.sh", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Codatouille",
+                "Un jeune script d'IA aspire à devenir un 'chef' développeur dans un grand restaurant de code parisien.",
+                "Animation", 2007, 111, 8.5, "/thumbnails/disney/codatouille.png", null,
+                "Rémy.py, Alfredo Linguini, Chef Skinner", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Cloud Up",
+                "Un retraité virtualise sa maison dans le cloud pour échapper à la gentrification numérique.",
+                "Animation", 2009, 96, 8.6, "/thumbnails/disney/cloud-up.png", null,
+                "Carl Fredricksen, Russell.zip, Dug.cloud", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Frontend and the Backend",
+                "Une développeuse front-end tombe amoureuse d'un monstrueux mais puissant système backend legacy.",
+                "Romance", 2017, 129, 8.0, "/thumbnails/disney/front-back.png", null,
+                "Belle.js, The Beast (Legacy COBOL), Gaston.IO", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Mulan: The JIT Compilation",
+                "Un script Python se fait passer pour un binaire C++ pour rejoindre l'armée des processus haute performance.",
+                "Action", 1998, 88, 8.1, "/thumbnails/disney/mulan.png", null,
+                "Fa Mulan.py, Li Shang.dll, Mushu (the debugger)", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Inside-System",
+                "Les microservices personnifiés gèrent la stabilité émotionnelle d'un jeune système d'exploitation.",
+                "Animation", 2015, 360, 8.8, "/thumbnails/disney/inside-system.png", null,
+                "Joy.dll, Sadness.log, Anger.err", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("The Code King",
+                "Le cycle de vie du développement logiciel, raconté à travers la savane des serveurs.",
+                "Animation", 1994, 420, 9.0, "/thumbnails/disney/code-king.png", null,
+                "Simba.sh, Mufasa.exe, Scar.vbs", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Tarzan: Raised by COBOL",
+                "Un jeune programmeur élevé par des systèmes COBOL doit s'adapter au monde moderne des API REST.",
+                "Drama", 1999, 380, 7.9, "/thumbnails/disney/tarzan.png", null,
+                "Tarzan, Jane Porter (API Specialist), Clayton.dll (deprecated)", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Le projet hanté et les 999 bugs", "Un manoir de code anciens abrite 999 bugs fantomatique",
+                "Drama", 2003, 180, 8.0, "/thumbnails/disney/manor.png", null, "Eddy Murphy, plein de CVE",Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Toy Story: The OS Update",
+                "Des jouets dotés d'une IA avancée craignent d'être remplacés par un nouveau modèle plus performant.",
+                "Sci-Fi", 1995, 81, 9.2, "/thumbnails/it-crowd.png", null,
+                "Woody.ROM, Buzz Lightyear 2.0, Mr. Potato Headless", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Monsters, Inc.",
+                "Des monstres d'élite collectent des paquets de données (cris d'enfants) pour alimenter leur monde.",
+                "Sci-Fi", 2001, 92, 9.1, "/thumbnails/shadows-below.png", null,
+                "Sully.tar, Mike Wazowski.gif, Boo.txt", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Lilo & Stitch.exe",
+                "Une petite application 'Lilo' adopte un 'Stitch.exe', un programme destructeur en fuite, et lui apprend le sens de 'ohana' (le réseau local).",
+                "Sci-Fi", 2002, 85, 8.5, "/thumbnails/mishap.png", null,
+                "Lilo.app, Stitch.exe, Nani.firewall", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Moana: The Packet Journey",
+                "Une jeune 'requête' quitte son île (serveur local) pour traverser le grand océan (Internet) et restaurer le cœur du réseau.",
+                "Adventure", 2016, 107, 8.8, "/thumbnails/planet-earth.png", null,
+                "Moana.request, Maui (the demigod proxy), Te Fiti (the root server)", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Termin-aladdin",
+                "Un jeune homme des rues trouve un terminal magique contenant un 'génie' capable d'exécuter n'importe quelle commande sudo.",
+                "Fantasy", 1992, 90, 8.4, "/thumbnails/sorcerer.png", null,
+                "Aladdin, Génie.sh, Jafar.root", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Frozen System",
+                "Une reine crashe accidentellement son royaume avec un 'kernel panic' hivernal persistant.",
+                "Fantasy", 2013, 102, 8.2, "/thumbnails/disney/frozen.png", null,
+                "Elsa.sys, Anna.exe, Olaf.tmp", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Hercules CPU",
+                "Le fils de Zeus, un CPU légendaire, doit accomplir 12 travaux (benchmarks) pour prouver sa valeur sur le mont Olympe des serveurs.",
+                "Fantasy", 1997, 93, 8.3, "/thumbnails/disney/hercules.png", null,
+                "Hercules, Philoctetes (The Compiler), Hades (The Overheater)", Video.VideoType.MOVIE)));
+        videos.add(videoRepository.save(new Video("Cinder-thread-a",
+                "Un thread de basse priorité, aidé par une fée (le Scheduler), obtient une chance de s'exécuter au bal du CPU.",
+                "Romance", 1950, 74, 7.9, "/thumbnails/second-chances.png", null,
+                "Cinderella, The Fairy God-scheduler, Prince Charming CPU Core", Video.VideoType.MOVIE)));
+
+        videos.add(videoRepository.save(new Video("Beskar Protocol",
+                "Un chasseur de primes solitaire parcourt une galaxie de micro-services en ruine, protégeant une précieuse instance legacy convoitée par un Empire de systèmes distribués.",
+                "Sci-Fi", 2019, 666, 9.9, "/thumbnails/disney/beskar.png", null,
+                "Din.bat, Grogu.sh, Bo-Katan.yml, MoffGideon.exe, Armorer.conf, IG-11.service, Kuiil.init, CaraDune.sys, GreefKarga.api", Video.VideoType.SERIES)));
+        videos.add(videoRepository.save(new Video("ClusterVision",
+                "Une ingénieure DevOps altère la réalité de son cluster Kubernetes pour recréer un environnement stable où aucun incident n’existe… jusqu’à ce que les métriques commencent à mentir.",
+                "Sci-Fi", 2021, 888, 9.8, "/thumbnails/disney/clustervision.png", null,
+                "Wanda.k8s, Vision.pod, Agatha.debug, Pietro.reload, VisionReplicaSet, Hex.yaml, Westview.namespace, MetricLiar.service, ScarletWitch.configMap, Quicksilver.deployment", Video.VideoType.SERIES)));
+        videos.add(videoRepository.save(new Video("The Book of Backups",
+                "Un ancien chasseur d’incidents tente de régner sur le territoire oublié des sauvegardes jamais testées.",
+                "Sci-Fi", 2021, 555, 8.7, "/thumbnails/disney/bookofbackups.png", null,
+                "BobaFett.incident, Fennec.restore, BibFortuna.backup, Jabba.tape, Sarlacc.corrupt, Gamorrean.sysadmin, Tatooine.archive, Mandalorian.legacy, Tusken.scavenger, PeliMotto.droid", Video.VideoType.SERIES)));
+        videos.add(videoRepository.save(new Video("Merge Knight",
+                "Un développeur possède plusieurs personnalités Git : feature branch héroïque, hotfix nocturne, commit sauvage à 3h du matin. Il ne sait plus qui a déployé en prod.",
+                "Psychological Thriller", 2022, 444, 9.1, "/thumbnails/disney/mergeknight.png", null,
+                "Marc.feature, Steven.hotfix, Jake.commit3am, Khonshu.mergeConflict, Layla.branch, Taweret.rollback, ArthurHarrow.deploy, Ammit.audit, Gus.fishScript, StevenGrant.config", Video.VideoType.SERIES)));
+
+        System.out.println("✅ Loaded " + videos.size() + " Disney/Tech videos");
+        return videos;
     }
 
     private List<Video> loadVideos() {

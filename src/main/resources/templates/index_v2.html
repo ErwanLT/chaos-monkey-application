@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chaos+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link th:href="@{/css/disney.css}" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <a class="navbar-brand" href="/">CHAOS+</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-2"></i>Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/search?q="
+                        onclick="document.getElementById('searchInput').focus(); return false;"><i
+                            class="fas fa-search me-2"></i>Search</a></li>
+                <li class="nav-item"><a class="nav-link" href="/my-list"><i class="fas fa-plus me-2"></i>Watchlist</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="/new-popular"><i
+                            class="fas fa-star me-2"></i>Originals</a></li>
+                <li class="nav-item"><a class="nav-link" href="/movies"><i class="fas fa-film me-2"></i>Movies</a></li>
+                <li class="nav-item"><a class="nav-link" href="/series"><i class="fas fa-tv me-2"></i>Series</a></li>
+            </ul>
+            <form action="/search" method="get" class="d-flex me-3 search-form">
+                <input id="searchInput"
+                    class="form-control me-2 bg-transparent text-white border-bottom border-0 rounded-0" type="search"
+                    name="q" placeholder="Search" aria-label="Search"
+                    style="border-bottom: 1px solid var(--disney-light) !important;">
+            </form>
+        </div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="User"
+            class="profile-img">
+    </nav>
+
+    <main>
+        <div class="hero" th:if="${featuredVideo != null}"
+            th:style="'background-image: linear-gradient(to right, rgba(4, 7, 20, 1) 10%, rgba(4, 7, 20, 0) 100%), url(' + ${featuredVideo.thumbnailUrl} + ');'">
+            <div class="hero-content">
+                <h1 class="hero-title" th:text="${featuredVideo.title}">Video Title</h1>
+                <p class="hero-description" th:text="${featuredVideo.description}">Video description.</p>
+                <div>
+                    <button class="btn btn-light"><i class="fas fa-play me-2"></i> Play</button>
+                    <button class="btn btn-secondary" onclick="openVideoModal(this)"
+                        th:data-title="${featuredVideo.title}" th:data-description="${featuredVideo.description}"
+                        th:data-year="${featuredVideo.releaseYear}" th:data-duration="${featuredVideo.durationMinutes}"
+                        th:data-rating="${featuredVideo.rating}" th:data-genre="${featuredVideo.genre}"
+                        th:data-thumbnail="${featuredVideo.thumbnailUrl}" th:data-trailer="${featuredVideo.trailerUrl}"
+                        th:data-cast="${featuredVideo.casting}">
+                        More Info
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="brands-container">
+            <!-- Functional brand cards linked to search -->
+            <a href="/search?q=Disney" class="brand-card text-decoration-none">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Disney_wordmark.svg" alt="Disney">
+                <video autoplay loop muted playsinline>
+                    <source
+                        src="https://vod-bgc-eu-west-1.media.dssott.com/bgui/ps01/disney/bgui/2019/08/01/1564674844-disney.mp4"
+                        type="video/mp4">
+                </video>
+            </a>
+            <a href="/search?q=Pixar" class="brand-card text-decoration-none">
+                <img src="https://fr.web.img6.acsta.net/r_654_368/newsv7/19/06/19/20/09/4470210.jpg" alt="Pixar">
+                <video autoplay loop muted playsinline>
+                    <source
+                        src="https://vod-bgc-eu-west-1.media.dssott.com/bgui/ps01/disney/bgui/2019/08/01/1564676714-pixar.mp4"
+                        type="video/mp4">
+                </video>
+            </a>
+            <a href="/search?q=Marvel" class="brand-card text-decoration-none">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Marvel_Logo.svg" alt="Marvel">
+                <video autoplay loop muted playsinline>
+                    <source
+                        src="https://vod-bgc-eu-west-1.media.dssott.com/bgui/ps01/disney/bgui/2019/08/01/1564676115-marvel.mp4"
+                        type="video/mp4">
+                </video>
+            </a>
+            <a href="/search?q=Star%20Wars" class="brand-card text-decoration-none">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Star_Wars_Logo.svg" alt="Star Wars">
+                <video autoplay loop muted playsinline>
+                    <source
+                        src="https://vod-bgc-eu-west-1.media.dssott.com/bgui/ps01/disney/bgui/2020/12/17/1608229455-star-wars.mp4"
+                        type="video/mp4">
+                </video>
+            </a>
+            <a href="/search?q=National%20Geographic" class="brand-card text-decoration-none">
+                <img src="https://www.greyboxcreative.com/wp-content/uploads/2020/01/National-Geographic-logo.jpg.webp"
+                    alt="National Geographic">
+                <video autoplay loop muted playsinline>
+                    <source
+                        src="https://vod-bgc-eu-west-1.media.dssott.com/bgui/ps01/disney/bgui/2019/08/01/1564676296-national-geographic.mp4"
+                        type="video/mp4">
+                </video>
+            </a>
+        </div>
+
+        <div class="content-container mt-4">
+            <div th:each="genreEntry : ${genres}" class="genre-row mb-4">
+                <h3 class="genre-title" th:text="${genreEntry.key}">Genre Title</h3>
+                <div class="video-scroller">
+                    <div th:each="video : ${genreEntry.value}" class="video-card" onclick="openVideoModal(this)"
+                        th:data-id="${video.id}" th:data-title="${video.title}"
+                        th:data-description="${video.description}" th:data-year="${video.releaseYear}"
+                        th:data-duration="${video.durationMinutes}" th:data-rating="${video.rating}"
+                        th:data-genre="${video.genre}" th:data-thumbnail="${video.thumbnailUrl}"
+                        th:data-trailer="${video.trailerUrl}" th:data-cast="${video.casting}">
+                        <img th:src="${video.thumbnailUrl}" alt="Thumbnail">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1">
+        <div class="modal-dialog modal-xl-custom modal-dialog-centered">
+            <div class="modal-content"
+                style="background-color: var(--disney-nav); border: 1px solid var(--card-border);">
+                <div class="modal-header border-0 position-absolute w-100 p-3" style="z-index: 100;">
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal"
+                        aria-label="Close"
+                        style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="modal-hero" id="modalHero">
+                        <video id="modalVideoPlayer" width="100%" height="100%" autoplay muted loop
+                            style="display:none; object-fit: cover; position: absolute; top:0; left:0;"></video>
+                        <div class="modal-hero-overlay"
+                            style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(to top, var(--disney-nav), transparent);">
+                        </div>
+
+                        <div class="modal-hero-content p-5"
+                            style="position: relative; z-index: 10; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
+                            <h2 id="modalTitle" class="modal-title-text mb-3"
+                                style="font-size: 2.5rem; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                                Title</h2>
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <button
+                                    class="btn btn-light btn-lg px-4 fw-bold shadow-sm d-flex align-items-center gap-2"
+                                    onclick="playModalVideo()">
+                                    <i class="fas fa-play"></i> Lecture
+                                </button>
+                                <button
+                                    class="btn rounded-circle border-white border-2 text-white p-2 d-flex align-items-center justify-content-center"
+                                    style="width: 45px; height: 45px; background: rgba(30, 30, 30, 0.5);">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <button
+                                    class="btn rounded-circle border-white border-2 text-white p-2 d-flex align-items-center justify-content-center"
+                                    style="width: 45px; height: 45px; background: rgba(30, 30, 30, 0.5);">
+                                    <i class="fas fa-thumbs-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex gap-3 mb-3 text-white-50 align-items-center">
+                                    <span id="modalYear"></span>
+                                    <span id="modalDuration"></span>
+                                    <span class="badge border border-secondary" id="modalRating"
+                                        style="color: var(--disney-light);"></span>
+                                    <span class="badge border border-secondary">HD</span>
+                                </div>
+                                <p id="modalDescription" class="fs-5" style="line-height: 1.6;"></p>
+                            </div>
+                            <div class="col-md-4 text-white-50">
+                                <div class="mb-2">
+                                    <span class="text-secondary">Genres:</span>
+                                    <span id="modalGenre" class="text-white"></span>
+                                </div>
+                                <div>
+                                    <span class="text-secondary">Distribution:</span>
+                                    <span id="modalCast" class="text-white"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/disney.js}"></script>
+</body>
+
+</html>

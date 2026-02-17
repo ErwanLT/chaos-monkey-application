@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.controllers;
 
+import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
 import fr.eletutour.chaosmonkeyapplication.exception.RequestTimeoutException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.services.CatalogService;
@@ -21,9 +22,11 @@ public class HomeController {
 
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
     private final CatalogService catalogService;
+    private final UIConfiguration uiConfiguration;
 
-    public HomeController(CatalogService catalogService) {
+    public HomeController(CatalogService catalogService, UIConfiguration uiConfiguration) {
         this.catalogService = catalogService;
+        this.uiConfiguration = uiConfiguration;
     }
 
     /**
@@ -84,6 +87,9 @@ public class HomeController {
             model.addAttribute("genres", allVideos.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
             log.info("<<< [HOME] Sortie après {} ms", (System.currentTimeMillis() - startTotal));
+            if ("v2".equals(uiConfiguration.getUiVersion())) {
+                return "index_v2";
+            }
             return "index";
 
         } catch (TimeoutException e) {
@@ -107,6 +113,9 @@ public class HomeController {
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", movies.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
         return "index";
     }
 
@@ -120,6 +129,9 @@ public class HomeController {
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", series.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
         return "index";
     }
 
@@ -132,6 +144,9 @@ public class HomeController {
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Trending Now", popular));
 
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
         return "index";
     }
 
@@ -146,6 +161,9 @@ public class HomeController {
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("My List", myList));
 
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
         return "index";
     }
 
@@ -158,6 +176,9 @@ public class HomeController {
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Search Results for '" + query + "'", searchResults));
 
+        if ("v2".equals(uiConfiguration.getUiVersion())) {
+            return "index_v2";
+        }
         return "index";
     }
 }
