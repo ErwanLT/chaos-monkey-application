@@ -41,19 +41,29 @@
 
     <main>
         <div class="hero" th:if="${featuredVideo != null}"
-            th:style="'background-image: linear-gradient(to right, rgba(4, 7, 20, 1) 10%, rgba(4, 7, 20, 0) 100%), url(' + ${featuredVideo.thumbnailUrl} + ');'">
+            th:style="'background-image: url(' + ${featuredVideo.thumbnailUrl} + ');'">
             <div class="hero-content">
-                <h1 class="hero-title" th:text="${featuredVideo.title}">Video Title</h1>
+                <!-- Use title as a logo representation -->
+                <h1 class="hero-logo-text" th:text="${featuredVideo.title}">Video Title</h1>
+
+                <div class="hero-metadata">
+                    <span th:text="${featuredVideo.releaseYear}">2024</span>
+                    <span>•</span>
+                    <span th:text="${featuredVideo.durationMinutes} + 'm'">120m</span>
+                    <span>•</span>
+                    <span th:text="${featuredVideo.genre}">Action</span>
+                    <span class="badge border border-secondary ms-2" th:text="${featuredVideo.rating}">PG-13</span>
+                </div>
+
                 <p class="hero-description" th:text="${featuredVideo.description}">Video description.</p>
-                <div>
-                    <button class="btn btn-light"><i class="fas fa-play me-2"></i> Play</button>
-                    <button class="btn btn-secondary" onclick="openVideoModal(this)"
-                        th:data-title="${featuredVideo.title}" th:data-description="${featuredVideo.description}"
-                        th:data-year="${featuredVideo.releaseYear}" th:data-duration="${featuredVideo.durationMinutes}"
-                        th:data-rating="${featuredVideo.rating}" th:data-genre="${featuredVideo.genre}"
-                        th:data-thumbnail="${featuredVideo.thumbnailUrl}" th:data-trailer="${featuredVideo.trailerUrl}"
-                        th:data-cast="${featuredVideo.casting}">
-                        More Info
+
+                <div class="hero-buttons">
+                    <button class="btn btn-info" onclick="openVideoModal(this)" th:data-title="${featuredVideo.title}"
+                        th:data-description="${featuredVideo.description}" th:data-year="${featuredVideo.releaseYear}"
+                        th:data-duration="${featuredVideo.durationMinutes}" th:data-rating="${featuredVideo.rating}"
+                        th:data-genre="${featuredVideo.genre}" th:data-thumbnail="${featuredVideo.thumbnailUrl}"
+                        th:data-trailer="${featuredVideo.trailerUrl}" th:data-cast="${featuredVideo.casting}">
+                        Détails
                     </button>
                 </div>
             </div>
