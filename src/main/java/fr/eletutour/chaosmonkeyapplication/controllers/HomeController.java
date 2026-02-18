@@ -1,6 +1,7 @@
 package fr.eletutour.chaosmonkeyapplication.controllers;
 
 import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
+import fr.eletutour.chaosmonkeyapplication.exception.CatalogException;
 import fr.eletutour.chaosmonkeyapplication.exception.RequestTimeoutException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.services.CatalogService;
@@ -111,7 +112,11 @@ public class HomeController {
         List<Video> movies = executeWithTimeout("MOVIES-TASK",
                 () -> catalogService.getVideosByType(Video.VideoType.MOVIE));
 
-        Video featuredVideo = movies.isEmpty() ? null : movies.get(0);
+        if (movies.isEmpty()) {
+            throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "Aucun film trouvé");
+        }
+
+        Video featuredVideo = movies.get(0);
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", movies.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
@@ -127,7 +132,11 @@ public class HomeController {
         List<Video> series = executeWithTimeout("SERIES-TASK",
                 () -> catalogService.getVideosByType(Video.VideoType.SERIES));
 
-        Video featuredVideo = series.isEmpty() ? null : series.get(0);
+        if (series.isEmpty()) {
+            throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "Aucune série trouvée");
+        }
+
+        Video featuredVideo = series.get(0);
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", series.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
@@ -174,7 +183,12 @@ public class HomeController {
         log.info(">>> [SEARCH] Entrée dans la méthode search() pour '{}'", query);
         List<Video> searchResults = executeWithTimeout("SEARCH-TASK", () -> catalogService.searchVideos(query));
 
-        Video featuredVideo = searchResults.isEmpty() ? null : searchResults.get(0);
+        if (searchResults.isEmpty()) {
+            throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND,
+                    "Aucun résultat pour '" + query + "'");
+        }
+
+        Video featuredVideo = searchResults.get(0);
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Search Results for '" + query + "'", searchResults));
 
@@ -191,9 +205,14 @@ public class HomeController {
         log.info(">>> [SECTION] Entrée dans la méthode section() pour '{}'", name);
         List<Video> sectionVideos = executeWithTimeout("SECTION-TASK", () -> sectionService.getVideosBySection(name));
 
-        Video featuredVideo = sectionVideos.isEmpty() ? null : sectionVideos.get(0);
+        if (sectionVideos.isEmpty()) {
+            throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND,
+                    "Aucune vidéo pour la section '" + name + "'");
+        }
+
+        Video featuredVideo = sectionVideos.get(0);
         model.addAttribute("featuredVideo", featuredVideo);
-        model.addAttribute("genres", Collections.singletonMap(name + " Universe", sectionVideos));
+        model.addAttribute("genres", sectionVideos.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
         if ("v2".equals(uiConfiguration.getUiVersion())) {
             return "index_v2";

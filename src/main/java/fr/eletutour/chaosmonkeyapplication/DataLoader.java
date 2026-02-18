@@ -149,8 +149,8 @@ public class DataLoader implements CommandLineRunner {
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Cinder-thread-a",
                                 "Un thread de basse priorité, aidé par une fée (le Scheduler), obtient une chance de s'exécuter au bal du CPU.",
-                                "Romance", 1950, 74, 7.9, "/thumbnails/second-chances.png", null,
-                                "Cinderella, The Fairy God-scheduler, Prince Charming CPU Core", "Disney",
+                                "Romance", 1950, 74, 7.9, "/thumbnails/disney/cinderthreada.png", null,
+                                "LowPriority.thread, Scheduler.guide, CPU.palace, Priority.gown, NiceValue.stars, Execution.sparkles, TimeCycle.clock, Debug.helpers, Kernel.magic", "Disney",
                                 Video.VideoType.MOVIE)));
 
                 videos.add(videoRepository.save(new Video("Beskar Protocol",
