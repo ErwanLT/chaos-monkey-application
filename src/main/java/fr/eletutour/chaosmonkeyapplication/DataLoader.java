@@ -117,26 +117,18 @@ public class DataLoader implements CommandLineRunner {
                                 "Un manoir de code anciens abrite 999 bugs fantomatique",
                                 "Drama", 2003, 180, 8.0, "/thumbnails/disney/manor.png", null,
                                 "Eddy Murphy, plein de CVE", "Disney", Video.VideoType.MOVIE)));
-                videos.add(videoRepository.save(new Video("Toy Story: The OS Update",
+                videos.add(videoRepository.save(new Video("Story: The OS Update",
                                 "Des jouets dotés d'une IA avancée craignent d'être remplacés par un nouveau modèle plus performant.",
-                                "Sci-Fi", 1995, 81, 9.2, "/thumbnails/it-crowd.png", null,
+                                "Sci-Fi", 1995, 81, 9.2, "/thumbnails/disney/story.png", null,
                                 "Woody.ROM, Buzz Lightyear 2.0, Mr. Potato Headless", "Pixar", Video.VideoType.MOVIE)));
-                videos.add(videoRepository.save(new Video("Monsters, Inc.",
-                                "Des monstres d'élite collectent des paquets de données (cris d'enfants) pour alimenter leur monde.",
-                                "Sci-Fi", 2001, 92, 9.1, "/thumbnails/shadows-below.png", null,
-                                "Sully.tar, Mike Wazowski.gif, Boo.txt", "Pixar", Video.VideoType.MOVIE)));
-                videos.add(videoRepository.save(new Video("Lilo & Stitch.exe",
-                                "Une petite application 'Lilo' adopte un 'Stitch.exe', un programme destructeur en fuite, et lui apprend le sens de 'ohana' (le réseau local).",
-                                "Sci-Fi", 2002, 85, 8.5, "/thumbnails/mishap.png", null,
-                                "Lilo.app, Stitch.exe, Nani.firewall", "Disney", Video.VideoType.MOVIE)));
-                videos.add(videoRepository.save(new Video("Moana: The Packet Journey",
+                videos.add(videoRepository.save(new Video("Doata: The Packet Journey",
                                 "Une jeune 'requête' quitte son île (serveur local) pour traverser le grand océan (Internet) et restaurer le cœur du réseau.",
-                                "Adventure", 2016, 107, 8.8, "/thumbnails/planet-earth.png", null,
+                                "Adventure", 2016, 107, 8.8, "/thumbnails/disney/doata.png", null,
                                 "Moana.request, Maui (the demigod proxy), Te Fiti (the root server)", "Disney",
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Termin-aladdin",
                                 "Un jeune homme des rues trouve un terminal magique contenant un 'génie' capable d'exécuter n'importe quelle commande sudo.",
-                                "Fantasy", 1992, 90, 8.4, "/thumbnails/sorcerer.png", null,
+                                "Fantasy", 1992, 90, 8.4, "/thumbnails/disney/terminaladin.png", null,
                                 "Aladdin, Génie.sh, Jafar.root", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Frozen System",
                                 "Une reine crashe accidentellement son royaume avec un 'kernel panic' hivernal persistant.",
