@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${video.title} + ' — Chaos+'">Chaos+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" th:href="@{/favicon/chaos+.png}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            cursor: none;
+        }
+
+        body.controls-visible {
+            cursor: default;
+        }
+
+        /* ── Video ── */
+        #player {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            z-index: 1;
+        }
+
+        /* ── No-trailer fallback ── */
+        #no-trailer {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        #no-trailer-bg {
+            position: fixed;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.25) blur(4px);
+            z-index: 1;
+        }
+
+        #no-trailer>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Top overlay ── */
+        #top-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: opacity 0.4s ease;
+        }
+
+        #top-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #back-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        #title-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        #player-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        #player-meta {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.65);
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        #player-meta .dot {
+            opacity: 0.4;
+        }
+
+        .meta-badge {
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 3px;
+            padding: 1px 5px;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        /* ── Bottom controls ── */
+        #controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 0 2rem 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            transition: opacity 0.4s ease;
+        }
+
+        #controls.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Progress bar */
+        #progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            position: relative;
+            transition: height 0.15s;
+        }
+
+        #progress-container:hover {
+            height: 6px;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: #0072d2;
+            border-radius: 2px;
+            width: 0%;
+            pointer-events: none;
+        }
+
+        #progress-thumb {
+            position: absolute;
+            top: 50%;
+            right: auto;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            display: none;
+            pointer-events: none;
+        }
+
+        #progress-container:hover #progress-thumb {
+            display: block;
+        }
+
+        /* Controls row */
+        #controls-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ctrl-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.3rem 0.4rem;
+            border-radius: 4px;
+            transition: color 0.15s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ctrl-btn:hover {
+            color: rgba(255, 255, 255, 0.75);
+            transform: scale(1.1);
+        }
+
+        #time-display {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
+            min-width: 100px;
+        }
+
+        /* Volume */
+        #volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        /* ── Pause indicator ── */
+        #pause-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            font-size: 4rem;
+            background: rgba(0, 0, 0, 0.55);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        #pause-indicator.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Video player (only when trailer exists) ── -->
+    <div th:if="${video.trailerUrl != null and video.trailerUrl != ''}">
+        <video id="player" autoplay th:src="${video.trailerUrl}" preload="auto">
+            Your browser does not support HTML5 video.
+        </video>
+
+        <!-- Pause indicator -->
+        <div id="pause-indicator"><i class="fas fa-pause"></i></div>
+
+        <!-- Top overlay -->
+        <div id="top-overlay">
+            <button id="back-btn" onclick="history.back()" title="Retour">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div id="title-block">
+                <div id="player-title" th:text="${video.title}">Titre</div>
+                <div id="player-meta">
+                    <span th:text="${video.releaseYear}">2024</span>
+                    <span class="dot">•</span>
+                    <span th:text="${video.durationMinutes} + ' min'">120 min</span>
+                    <span class="dot">•</span>
+                    <span th:text="${video.genre}">Genre</span>
+                    <span class="meta-badge" th:text="${video.rating}">PG-13</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom controls -->
+        <div id="controls">
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <div id="progress-thumb"></div>
+            </div>
+            <div id="controls-row">
+                <button class="ctrl-btn" id="play-pause-btn" title="Lecture / Pause">
+                    <i class="fas fa-pause" id="play-pause-icon"></i>
+                </button>
+                <div id="volume-container">
+                    <button class="ctrl-btn" id="mute-btn" title="Couper le son">
+                        <i class="fas fa-volume-up" id="volume-icon"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1">
+                </div>
+                <div id="time-display">0:00 / 0:00</div>
+                <div class="spacer"></div>
+                <button class="ctrl-btn" id="fullscreen-btn" title="Plein écran">
+                    <i class="fas fa-expand" id="fullscreen-icon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── No trailer fallback ── -->
+    <div id="no-trailer" th:if="${video.trailerUrl == null or video.trailerUrl == ''}">
+        <div id="no-trailer-bg" th:style="'background-image: url(' + ${video.thumbnailUrl} + ');'"></div>
+        <i class="fas fa-film" style="font-size: 4rem; color: rgba(255,255,255,0.3);"></i>
+        <p style="font-size: 1.2rem; color: rgba(255,255,255,0.6);">Aucun trailer disponible pour ce contenu</p>
+        <button onclick="history.back()"
+            style="background: #fff; color: #000; border: none; padding: 0.7rem 1.8rem; border-radius: 4px; font-weight: 600; font-size: 1rem; cursor: pointer;">
+            <i class="fas fa-arrow-left me-2"></i> Retour
+        </button>
+    </div>
+
+    <script>
+        const video = document.getElementById('player');
+        if (video) {
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const playPauseIcon = document.getElementById('play-pause-icon');
+            const muteBtn = document.getElementById('mute-btn');
+            const volumeIcon = document.getElementById('volume-icon');
+            const volumeSlider = document.getElementById('volume-slider');
+            const progressBar = document.getElementById('progress-bar');
+            const progressThumb = document.getElementById('progress-thumb');
+            const progressContainer = document.getElementById('progress-container');
+            const timeDisplay = document.getElementById('time-display');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const fullscreenIcon = document.getElementById('fullscreen-icon');
+            const topOverlay = document.getElementById('top-overlay');
+            const controls = document.getElementById('controls');
+            const pauseIndicator = document.getElementById('pause-indicator');
+
+            let hideTimer = null;
+            let pauseFlashTimer = null;
+
+            // ── Format time helper ──
+            function fmtTime(sec) {
+                if (isNaN(sec)) return '0:00';
+                const m = Math.floor(sec / 60);
+                const s = Math.floor(sec % 60).toString().padStart(2, '0');
+                return `${m}:${s}`;
+            }
+
+            // ── Show / hide controls ──
+            function showControls() {
+                topOverlay.classList.remove('hidden');
+                controls.classList.remove('hidden');
+                document.body.classList.add('controls-visible');
+                clearTimeout(hideTimer);
+                if (!video.paused) {
+                    hideTimer = setTimeout(hideControls, 3000);
+                }
+            }
+
+            function hideControls() {
+                topOverlay.classList.add('hidden');
+                controls.classList.add('hidden');
+                document.body.classList.remove('controls-visible');
+            }
+
+            document.addEventListener('mousemove', showControls);
+            document.addEventListener('click', showControls);
+
+            // ── Play / Pause ──
+            function togglePlay() {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+
+            video.addEventListener('play', () => {
+                playPauseIcon.classList.replace('fa-play', 'fa-pause');
+                hideTimer = setTimeout(hideControls, 3000);
+            });
+
+            video.addEventListener('pause', () => {
+                playPauseIcon.classList.replace('fa-pause', 'fa-play');
+                clearTimeout(hideTimer);
+                showControls();
+                // Flash pause indicator
+                pauseIndicator.querySelector('i').className = 'fas fa-pause';
+                pauseIndicator.classList.add('show');
+                clearTimeout(pauseFlashTimer);
+                pauseFlashTimer = setTimeout(() => pauseIndicator.classList.remove('show'), 700);
+            });
+
+            playPauseBtn.addEventListener('click', togglePlay);
+
+            // Click on video toggles play
+            video.addEventListener('click', togglePlay);
+
+            // ── Volume ──
+            muteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                volumeSlider.value = video.muted ? 0 : video.volume;
+                updateVolumeIcon();
+            });
+
+            volumeSlider.addEventListener('input', () => {
+                video.volume = volumeSlider.value;
+                video.muted = (volumeSlider.value == 0);
+                updateVolumeIcon();
+            });
+
+            function updateVolumeIcon() {
+                if (video.muted || video.volume === 0) {
+                    volumeIcon.className = 'fas fa-volume-mute';
+                } else if (video.volume < 0.5) {
+                    volumeIcon.className = 'fas fa-volume-down';
+                } else {
+                    volumeIcon.className = 'fas fa-volume-up';
+                }
+            }
+
+            // ── Progress ──
+            video.addEventListener('timeupdate', () => {
+                if (video.duration) {
+                    const pct = (video.currentTime / video.duration) * 100;
+                    progressBar.style.width = pct + '%';
+                    progressThumb.style.left = pct + '%';
+                    timeDisplay.textContent = `${fmtTime(video.currentTime)} / ${fmtTime(video.duration)}`;
+                }
+            });
+
+            progressContainer.addEventListener('click', (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const ratio = (e.clientX - rect.left) / rect.width;
+                video.currentTime = ratio * video.duration;
+            });
+
+            // ── Fullscreen ──
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            document.addEventListener('fullscreenchange', () => {
+                if (document.fullscreenElement) {
+                    fullscreenIcon.className = 'fas fa-compress';
+                } else {
+                    fullscreenIcon.className = 'fas fa-expand';
+                }
+            });
+
+            // ── Keyboard shortcuts ──
+            document.addEventListener('keydown', (e) => {
+                showControls();
+                switch (e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'ArrowRight':
+                        video.currentTime = Math.min(video.currentTime + 10, video.duration);
+                        break;
+                    case 'ArrowLeft':
+                        video.currentTime = Math.max(video.currentTime - 10, 0);
+                        break;
+                    case 'ArrowUp':
+                        video.volume = Math.min(video.volume + 0.1, 1);
+                        volumeSlider.value = video.volume;
+                        updateVolumeIcon();
+                        break;
+                    case 'ArrowDown':
+                        video.volume = Math.max(video.volume - 0.1, 0);
+                        volumeSlider.value = video.volume;
+                        updateVolumeIcon();
+                        break;
+                    case 'KeyF':
+                        fullscreenBtn.click();
+                        break;
+                    case 'KeyM':
+                        muteBtn.click();
+                        break;
+                    case 'Escape':
+                        history.back();
+                        break;
+                }
+            });
+
+            // Init
+            showControls();
+        }
+    </script>
+</body>
+
+</html>

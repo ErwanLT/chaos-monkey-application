@@ -98,7 +98,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Belle.js, The Beast (Legacy COBOL), Gaston.IO", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Mulan: The JIT Compilation",
                                 "Un script Python se fait passer pour un binaire C++ pour rejoindre l'armée des processus haute performance.",
-                                "Action", 1998, 88, 8.1, "/thumbnails/disney/mulan.png", null,
+                                "Action", 1998, 88, 8.1, "/thumbnails/disney/mulan.png", "/trailer/mulan.mp4",
                                 "Fa Mulan.py, Li Shang.dll, Mushu (the debugger)", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Inside-System",
                                 "Les microservices personnifiés gèrent la stabilité émotionnelle d'un jeune système d'exploitation.",
@@ -110,12 +110,12 @@ public class DataLoader implements CommandLineRunner {
                                 "Simba.sh, Mufasa.exe, Scar.vbs", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Tarzan: Raised by COBOL",
                                 "Un jeune programmeur élevé par des systèmes COBOL doit s'adapter au monde moderne des API REST.",
-                                "Drama", 1999, 380, 7.9, "/thumbnails/disney/tarzan.png", null,
+                                "Drama", 1999, 380, 7.9, "/thumbnails/disney/tarzan.png", "/trailer/tarzan.mp4",
                                 "Tarzan, Jane Porter (API Specialist), Clayton.dll (deprecated)", "Disney",
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Le projet hanté et les 999 bugs",
                                 "Un manoir de code anciens abrite 999 bugs fantomatique",
-                                "Drama", 2003, 180, 8.0, "/thumbnails/disney/manor.png", null,
+                                "Drama", 2003, 180, 8.0, "/thumbnails/disney/manor.png", "/trailer/manor.mp4",
                                 "Eddy Murphy, plein de CVE", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Story: The OS Update",
                                 "Des jouets dotés d'une IA avancée craignent d'être remplacés par un nouveau modèle plus performant.",
@@ -123,7 +123,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Woody.ROM, Buzz Lightyear 2.0, Mr. Potato Headless", "Pixar", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Doata: The Packet Journey",
                                 "Une jeune 'requête' quitte son île (serveur local) pour traverser le grand océan (Internet) et restaurer le cœur du réseau.",
-                                "Adventure", 2016, 107, 8.8, "/thumbnails/disney/doata.png", null,
+                                "Adventure", 2016, 107, 8.8, "/thumbnails/disney/doata.png", "/trailer/doata.mp4",
                                 "Moana.request, Maui (the demigod proxy), Te Fiti (the root server)", "Disney",
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Termin-aladdin",
@@ -147,7 +147,7 @@ public class DataLoader implements CommandLineRunner {
 
                 videos.add(videoRepository.save(new Video("Beskar Protocol",
                                 "Un chasseur de primes solitaire parcourt une galaxie de micro-services en ruine, protégeant une précieuse instance legacy convoitée par un Empire de systèmes distribués.",
-                                "Sci-Fi", 2019, 666, 9.9, "/thumbnails/disney/beskar.png", null,
+                                "Sci-Fi", 2019, 666, 9.9, "/thumbnails/disney/beskar.png", "/trailer/beskar.mp4",
                                 "Din.bat, Grogu.sh, Bo-Katan.yml, MoffGideon.exe, Armorer.conf, IG-11.service, Kuiil.init, CaraDune.sys, GreefKarga.api",
                                 "Star Wars", Video.VideoType.SERIES)));
                 videos.add(videoRepository.save(new Video("ClusterVision",

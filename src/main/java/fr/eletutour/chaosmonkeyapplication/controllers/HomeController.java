@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -83,7 +85,7 @@ public class HomeController {
 
             log.info("[HOME] 🏁 Tout est arrivé à temps !");
 
-            Video featuredVideo = popularVideos.isEmpty() ? null : popularVideos.get(0);
+            Video featuredVideo = popularVideos.isEmpty() ? null : popularVideos.getFirst();
             model.addAttribute("featuredVideo", featuredVideo);
             model.addAttribute("popularVideos", popularVideos);
             model.addAttribute("topRatedVideos", topRatedVideos);
@@ -116,7 +118,7 @@ public class HomeController {
             throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "Aucun film trouvé");
         }
 
-        Video featuredVideo = movies.get(0);
+        Video featuredVideo = movies.getFirst();
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", movies.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
@@ -136,7 +138,7 @@ public class HomeController {
             throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "Aucune série trouvée");
         }
 
-        Video featuredVideo = series.get(0);
+        Video featuredVideo = series.getFirst();
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", series.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
@@ -151,7 +153,7 @@ public class HomeController {
         log.info(">>> [NEW-POPULAR] Entrée dans la méthode newPopular()");
         List<Video> popular = executeWithTimeout("POPULAR-TASK", catalogService::getPopularVideos);
 
-        Video featuredVideo = popular.isEmpty() ? null : popular.get(0);
+        Video featuredVideo = popular.isEmpty() ? null : popular.getFirst();
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Trending Now", popular));
 
@@ -167,7 +169,7 @@ public class HomeController {
         List<Video> allVideos = executeWithTimeout("MYLIST-TASK", catalogService::getAllVideos);
 
         List<Video> myList = allVideos.stream().limit(5).collect(Collectors.toList());
-        Video featuredVideo = myList.isEmpty() ? null : myList.get(0);
+        Video featuredVideo = myList.isEmpty() ? null : myList.getFirst();
 
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("My List", myList));
@@ -188,7 +190,7 @@ public class HomeController {
                     "Aucun résultat pour '" + query + "'");
         }
 
-        Video featuredVideo = searchResults.get(0);
+        Video featuredVideo = searchResults.getFirst();
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", Collections.singletonMap("Search Results for '" + query + "'", searchResults));
 
@@ -210,7 +212,7 @@ public class HomeController {
                     "Aucune vidéo pour la section '" + name + "'");
         }
 
-        Video featuredVideo = sectionVideos.get(0);
+        Video featuredVideo = sectionVideos.getFirst();
         model.addAttribute("featuredVideo", featuredVideo);
         model.addAttribute("genres", sectionVideos.stream().collect(Collectors.groupingBy(Video::getGenre)));
 
@@ -218,5 +220,16 @@ public class HomeController {
             return "index_v2";
         }
         return "index";
+    }
+
+    @GetMapping("/watch/{id}")
+    public String watch(@PathVariable Long id, Model model) {
+        log.info(">>> [WATCH] Entrée dans la méthode watch() pour videoId={}", id);
+        Optional<Video> videoOpt = catalogService.getVideoById(id);
+        if (videoOpt.isEmpty()) {
+            throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id);
+        }
+        model.addAttribute("video", videoOpt.get());
+        return "player_v2";
     }
 }
