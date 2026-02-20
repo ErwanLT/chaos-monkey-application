@@ -8,6 +8,10 @@ import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.RecommendationRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecommendationService {
+
+    private static final Logger log = LoggerFactory.getLogger(RecommendationService.class);
 
     private final RecommendationRepository recommendationRepository;
     private final WatchHistoryRepository watchHistoryRepository;
@@ -34,15 +40,29 @@ public class RecommendationService {
         this.userService = userService;
     }
 
+    @CircuitBreaker(name = "recommendationService", fallbackMethod = "fallbackRecommendations")
     public List<Recommendation> getRecommendationsForUser(Long userId) {
+        log.info("Fetching recommendations for user: {}", userId);
         return recommendationRepository.findTop10ByUserIdOrderByScoreDesc(userId);
+    }
+
+    public List<Recommendation> fallbackRecommendations(Long userId, Throwable t) {
+        log.warn("Circuit breaker open or error fetching recommendations for user {}. Reason: {}", userId, t.getMessage());
+        log.info("Returning popular content as fallback recommendations for user {}", userId);
+        // If DB call fails, we return popular content as fallback recommendations
+        List<Video> popular = videoRepository.findTop10ByOrderByViewCountDesc();
+        return popular.stream()
+                .map(v -> new Recommendation(userId, v.getId(), 0.0, "Popular now (Fallback)"))
+                .collect(Collectors.toList());
     }
 
     public List<Video> getTrendingVideos() {
         return videoRepository.findTop10ByOrderByViewCountDesc();
     }
 
+    @Retry(name = "recommendationService", fallbackMethod = "fallbackGenerateRecommendations")
     public void generateRecommendations(Long userId) {
+        log.info("Attempting to generate recommendations for user: {}", userId);
         try {
             // Validate user
             userService.getUserOrThrow(userId);
@@ -87,6 +107,12 @@ public class RecommendationService {
             throw new RecommendationException(RecommendationException.RecommendationError.GENERATION_FAILED,
                     e.getMessage());
         }
+    }
+
+    public void fallbackGenerateRecommendations(Long userId, Throwable t) {
+        log.error("All retry attempts failed for generating recommendations for user {}. Entering fallback. Error: {}", userId, t.getMessage());
+        // If generation fails after retries, we can pre-generate popular recommendations
+        generatePopularRecommendations(userId);
     }
 
     private void generatePopularRecommendations(Long userId) {

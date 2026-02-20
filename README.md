@@ -38,6 +38,7 @@ L'application propose deux interfaces :
 | Thymeleaf                    | —       |
 | Bootstrap                    | 5.3     |
 | Maven                        | 3.6+    |
+| Resilience4j                 | 2.3.0   |
 
 ## 🚀 Installation et démarrage
 
@@ -157,12 +158,14 @@ La documentation inclut les informations de contact, la licence Apache 2.0, les 
 > ```
 > Sans cette configuration, Chaos Monkey sera présent mais **restera inactif**.
 
-### Endpoints Actuator
+### Endpoints Actuator & Resilience
 
 - `GET /actuator/chaosmonkey` — État de Chaos Monkey
 - `POST /actuator/chaosmonkey/enable` — Activer Chaos Monkey
 - `POST /actuator/chaosmonkey/disable` — Désactiver Chaos Monkey
-- `GET /actuator/health` — Santé de l'application
+- `GET /actuator/health` — Santé (inclut l'état des Circuit Breakers)
+- `GET /actuator/circuitbreakers` — Détails des Circuit Breakers
+- `GET /actuator/retries` — Détails des mécanismes de Retry
 
 ### Exemple d'utilisation
 
@@ -298,24 +301,48 @@ src/main/resources/
     └── index_v2.html           # Interface v2 (Disney+)
 ```
 
-## 🧪 Scénario de test typique
+## 🧪 Scénarios de test
+
+### 1. Test de Résilience (Retry & Fallback)
+
+Ce scénario démontre comment l'application survit à des erreurs intermittentes grâce à Resilience4j.
 
 ```bash
-# 1. Lister les vidéos disponibles
-curl http://localhost:8080/api/catalog/videos
+# 1. Configurer Chaos Monkey pour injecter des exceptions (100% de probabilité)
+# On cible le service de streaming
+curl -X POST http://localhost:8080/actuator/chaosmonkey/assaults \
+  -H "Content-Type: application/json" \
+  -d '{"level": 1, "exceptionsActive": true, "watchedCustomServices": ["fr.eletutour.chaosmonkeyapplication.services.StreamingService"]}'
 
-# 2. Démarrer un streaming
+# 2. Activer Chaos Monkey
+curl -X POST http://localhost:8080/actuator/chaosmonkey/enable
+
+# 3. Tenter de démarrer un stream
 curl -X POST http://localhost:8080/api/streaming/start \
   -H "Content-Type: application/json" \
   -d '{"userId": 1, "videoId": 1}'
 
-# 3. Activer Chaos Monkey
-curl -X POST http://localhost:8080/actuator/chaosmonkey/enable
+# 4. Observer le comportement :
+#    → Dans les logs : Vous verrez 3 tentatives (Retry)
+#    → Résultat API : Le fallback retourne un statut "TEMPORARILY_UNAVAILABLE" 
+#      au lieu d'une erreur 500.
+```
 
-# 4. Observer les comportements
-#    → Latences aléatoires
-#    → Pages d'erreur thématiques (v1 ou v2)
-#    → Résilience de l'application
+### 2. Test du Circuit Breaker
+
+Démontre la protection des ressources système.
+
+```bash
+# 1. Provoquer plusieurs échecs sur les recommandations
+# Le circuit breaker est configuré sur une fenêtre de 10 appels (failureRateThreshold: 50%)
+for i in {1..10}; do curl http://localhost:8080/api/recommendations/1; done
+
+# 2. Vérifier l'état du circuit breaker
+curl http://localhost:8080/actuator/circuitbreakers
+
+# 3. Observer le fallback :
+#    → Même quand le service est "cassé", l'API retourne du contenu 
+#      populaire par défaut ("Popular now (Fallback)")
 ```
 
 ## 📝 Licence

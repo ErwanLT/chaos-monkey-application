@@ -9,6 +9,7 @@ import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import fr.eletutour.chaosmonkeyapplication.services.RecommendationService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 @Component
+@ConditionalOnProperty(name = "app.dataloader.enabled", havingValue = "true", matchIfMissing = true)
 public class DataLoader implements CommandLineRunner {
 
         private final VideoRepository videoRepository;
@@ -49,8 +51,18 @@ public class DataLoader implements CommandLineRunner {
                         videos = loadVideos();
                 }
 
+                if (videos.isEmpty()) {
+                        System.out.println("⚠️ No videos loaded, skipping users and history generation.");
+                        return;
+                }
+
                 // Load Users
                 List<User> users = loadUsers();
+
+                if (users.isEmpty()) {
+                        System.out.println("⚠️ No users loaded, skipping history generation.");
+                        return;
+                }
 
                 // Load Watch History
                 loadWatchHistory(users, videos);
@@ -467,6 +479,9 @@ public class DataLoader implements CommandLineRunner {
         }
 
         private void loadWatchHistory(List<User> users, List<Video> videos) {
+                if (users == null || videos == null || users.isEmpty() || videos.isEmpty()) {
+                        return;
+                }
                 Random random = new Random();
                 int historyCount = 0;
 
@@ -476,6 +491,9 @@ public class DataLoader implements CommandLineRunner {
 
                         for (int i = 0; i < videosWatched; i++) {
                                 Video randomVideo = videos.get(random.nextInt(videos.size()));
+                                if (randomVideo == null) {
+                                        continue;
+                                }
                                 int progress = 20 + random.nextInt(80); // 20-100% progress
 
                                 watchHistoryRepository

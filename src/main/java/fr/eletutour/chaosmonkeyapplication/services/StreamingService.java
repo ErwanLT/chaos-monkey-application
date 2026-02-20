@@ -5,6 +5,10 @@ import fr.eletutour.chaosmonkeyapplication.exception.StreamingException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,6 +18,8 @@ import java.util.Optional;
 
 @Service
 public class StreamingService {
+
+    private static final Logger log = LoggerFactory.getLogger(StreamingService.class);
 
     private final WatchHistoryRepository watchHistoryRepository;
     private final CatalogService catalogService;
@@ -26,7 +32,10 @@ public class StreamingService {
         this.userService = userService;
     }
 
+    @Retry(name = "streamingService", fallbackMethod = "fallbackStartStream")
+    @CircuitBreaker(name = "streamingService")
     public Map<String, Object> startStream(Long userId, Long videoId) {
+        log.info("Attempting to start stream for user: {} and video: {}", userId, videoId);
         // Validate user and video
         userService.getUserOrThrow(userId);
         Optional<Video> videoOpt = catalogService.getVideoById(videoId);
@@ -52,6 +61,19 @@ public class StreamingService {
         } catch (Exception e) {
             throw new StreamingException(StreamingException.StreamingError.STREAM_INIT_FAILED, e.getMessage());
         }
+    }
+
+    public Map<String, Object> fallbackStartStream(Long userId, Long videoId, Throwable t) {
+        log.error("Streaming service error for user {} and video {}. Reason: {}", userId, videoId, t.getMessage());
+        log.info("Returning unavailable status as fallback for stream request");
+        Map<String, Object> streamInfo = new HashMap<>();
+        streamInfo.put("userId", userId);
+        streamInfo.put("videoId", videoId);
+        streamInfo.put("streamUrl", "");
+        streamInfo.put("quality", "N/A");
+        streamInfo.put("status", "TEMPORARILY_UNAVAILABLE");
+        streamInfo.put("error", t.getMessage());
+        return streamInfo;
     }
 
     public WatchHistory updateProgress(Long userId, Long videoId, Integer progressPercentage) {

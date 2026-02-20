@@ -2,7 +2,9 @@ package fr.eletutour.chaosmonkeyapplication.services;
 
 import fr.eletutour.chaosmonkeyapplication.exception.RecommendationException;
 import fr.eletutour.chaosmonkeyapplication.exception.UserException;
+import fr.eletutour.chaosmonkeyapplication.models.Recommendation;
 import fr.eletutour.chaosmonkeyapplication.models.User;
+import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.repositories.RecommendationRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.VideoRepository;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
@@ -13,11 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RecommendationServiceTest {
@@ -37,6 +39,40 @@ class RecommendationServiceTest {
     void setUp() {
         recommendationService = new RecommendationService(recommendationRepository, watchHistoryRepository,
                 videoRepository, userService);
+    }
+
+    @Test
+    void fallbackRecommendations_ShouldReturnPopularContent() {
+        // Arrange
+        Long userId = 1L;
+        Video popularVideo = new Video();
+        popularVideo.setId(10L);
+        popularVideo.setGenre("Action");
+        when(videoRepository.findTop10ByOrderByViewCountDesc()).thenReturn(List.of(popularVideo));
+
+        // Act
+        List<Recommendation> result = recommendationService.fallbackRecommendations(userId, new RuntimeException("DB Down"));
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(10L, result.getFirst().getVideoId());
+        assertTrue(result.getFirst().getReason().contains("Fallback"));
+    }
+
+    @Test
+    void fallbackGenerateRecommendations_ShouldGeneratePopularContent() {
+        // Arrange
+        Long userId = 1L;
+        Video popularVideo = new Video();
+        popularVideo.setId(10L);
+        when(videoRepository.findTop10ByOrderByViewCountDesc()).thenReturn(List.of(popularVideo));
+
+        // Act
+        recommendationService.fallbackGenerateRecommendations(userId, new RuntimeException("Retry failed"));
+
+        // Assert
+        verify(recommendationRepository, atLeastOnce()).save(any(Recommendation.class));
     }
 
     @Test

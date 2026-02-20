@@ -36,6 +36,24 @@ class StreamingServiceTest {
     }
 
     @Test
+    void fallbackStartStream_ShouldReturnUnavailableInfo() {
+        // Arrange
+        Long userId = 1L;
+        Long videoId = 10L;
+        String errorMessage = "Service Failure";
+
+        // Act
+        Map<String, Object> result = streamingService.fallbackStartStream(userId, videoId, new RuntimeException(errorMessage));
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(userId, result.get("userId"));
+        assertEquals(videoId, result.get("videoId"));
+        assertEquals("TEMPORARILY_UNAVAILABLE", result.get("status"));
+        assertEquals(errorMessage, result.get("error"));
+    }
+
+    @Test
     void startStream_ShouldReturnInfo_WhenUserAndVideoExist() {
         // Arrange
         Long userId = 1L;

@@ -12,4 +12,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: chaosmonkey
+        include: chaosmonkey, health, info, circuitbreakers, retries
+  health:
+    circuitbreakers:
+      enabled: true
