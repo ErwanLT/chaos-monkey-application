@@ -128,7 +128,7 @@ public class DataLoader implements CommandLineRunner {
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Termin-aladdin",
                                 "Un jeune homme des rues trouve un terminal magique contenant un 'génie' capable d'exécuter n'importe quelle commande sudo.",
-                                "Fantasy", 1992, 90, 8.4, "/thumbnails/disney/terminaladin.png", null,
+                                "Fantasy", 1992, 90, 8.4, "/thumbnails/disney/terminaladin.png", "/trailer/aladin.mp4",
                                 "Aladdin, Génie.sh, Jafar.root", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Frozen System",
                                 "Une reine crashe accidentellement son royaume avec un 'kernel panic' hivernal persistant.",
@@ -136,7 +136,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Elsa.sys, Anna.exe, Olaf.tmp", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Hercules CPU",
                                 "Le fils de Zeus, un CPU légendaire, doit accomplir 12 travaux (benchmarks) pour prouver sa valeur sur le mont Olympe des serveurs.",
-                                "Fantasy", 1997, 93, 8.3, "/thumbnails/disney/hercules.png", null,
+                                "Fantasy", 1997, 93, 8.3, "/thumbnails/disney/hercules.png", "/trailer/hercules.mp4",
                                 "Hercules, Philoctetes (The Compiler), Hades (The Overheater)", "Disney",
                                 Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Cinder-thread-a",
