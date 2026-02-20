@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.controllers.api;
 
+import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
 import fr.eletutour.chaosmonkeyapplication.exception.UserException;
 import fr.eletutour.chaosmonkeyapplication.models.User;
 import fr.eletutour.chaosmonkeyapplication.services.UserService;
@@ -24,6 +25,9 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private UIConfiguration uiConfiguration;
 
     @Test
     void getUser_ShouldReturnUser_WhenExists() throws Exception {

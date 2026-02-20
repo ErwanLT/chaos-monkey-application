@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.controllers.api;
 
+import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
 import fr.eletutour.chaosmonkeyapplication.exception.RecommendationException;
 import fr.eletutour.chaosmonkeyapplication.services.RecommendationService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class RecommendationControllerTest {
 
     @MockitoBean
     private RecommendationService recommendationService;
+
+    @MockitoBean
+    private UIConfiguration uiConfiguration;
 
     @Test
     void getRecommendations_ShouldReturnList_WhenSuccessful() throws Exception {

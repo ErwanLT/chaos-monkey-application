@@ -1,5 +1,6 @@
 package fr.eletutour.chaosmonkeyapplication.controllers.api;
 
+import fr.eletutour.chaosmonkeyapplication.configurations.UIConfiguration;
 import fr.eletutour.chaosmonkeyapplication.exception.CatalogException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.services.CatalogService;
@@ -24,6 +25,9 @@ class CatalogControllerTest {
 
     @MockitoBean
     private CatalogService catalogService;
+
+    @MockitoBean
+    private UIConfiguration uiConfiguration;
 
     @Test
     void getVideoById_ShouldReturnVideo_WhenExists() throws Exception {
