@@ -70,7 +70,7 @@ public class ChaosSimulation extends Simulation {
             exec(http("Start Streaming")
                     .post("/api/streaming/start")
                     // Utilisation de #{videoId} avec guillemets si c'est un String
-                    .body(StringBody("{\"userId\": #{userId}, \"videoId\": \"#{videoId}\"}"))
+                    .body(StringBody("{\"userId\": #{userId}, \"videoId\": #{videoId}}"))
                     .check(status().is(200)));
 
     private static final ChainBuilder updateProgress =
@@ -81,7 +81,7 @@ public class ChaosSimulation extends Simulation {
                     .exec(http("Update Progress")
                             .post("/api/streaming/progress")
                             // Syntaxe propre utilisant les variables de session
-                            .body(StringBody("{\"userId\": #{userId}, \"videoId\": \"#{videoId}\", \"progress\": #{currentProgress}}"))
+                            .body(StringBody("{\"userId\": #{userId}, \"videoId\": #{videoId}, \"progress\": #{currentProgress}}"))
                             .check(status().is(200)));
 
     // --- Journeys ---
