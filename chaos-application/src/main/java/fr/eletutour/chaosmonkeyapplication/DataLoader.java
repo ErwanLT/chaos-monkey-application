@@ -106,7 +106,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Carl Fredricksen, Russell.zip, Dug.cloud", "Pixar", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Frontend and the Backend",
                                 "Une développeuse front-end tombe amoureuse d'un monstrueux mais puissant système backend legacy.",
-                                "Romance", 2017, 129, 8.0, "/thumbnails/disney/front-back.png", null,
+                                "Romance", 2017, 129, 8.0, "/thumbnails/disney/front-back.png", "trailer/front-back.mp4",
                                 "Belle.js, The Beast (Legacy COBOL), Gaston.IO", "Disney", Video.VideoType.MOVIE)));
                 videos.add(videoRepository.save(new Video("Mulan: The JIT Compilation",
                                 "Un script Python se fait passer pour un binaire C++ pour rejoindre l'armée des processus haute performance.",
