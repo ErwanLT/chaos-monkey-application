@@ -41,7 +41,7 @@
         }
 
         /* ── No-trailer fallback ── */
-        #no-trailer {
+        .fallback-screen {
             position: fixed;
             inset: 0;
             z-index: 2;
@@ -52,7 +52,7 @@
             gap: 1.5rem;
         }
 
-        #no-trailer-bg {
+        .fallback-bg {
             position: fixed;
             inset: 0;
             background-size: cover;
@@ -61,7 +61,7 @@
             z-index: 1;
         }
 
-        #no-trailer>* {
+        .fallback-screen>* {
             position: relative;
             z-index: 2;
         }
@@ -290,13 +290,25 @@
 <body>
 
     <!-- ── Video player (only when trailer exists) ── -->
-    <div th:if="${video.trailerUrl != null and video.trailerUrl != ''}">
-        <video id="player" autoplay th:src="${video.trailerUrl}" preload="auto">
+    <div th:if="${streamInfo != null and streamInfo['streamUrl'] != null and streamInfo['streamUrl'] != ''}">
+        <video id="player" autoplay th:src="${streamInfo['streamUrl']}" preload="auto">
             Your browser does not support HTML5 video.
         </video>
 
         <!-- Pause indicator -->
         <div id="pause-indicator"><i class="fas fa-pause"></i></div>
+
+        <!-- Bannière d'erreur rendue côté serveur (fallback Resilience4j) -->
+        <div th:if="${streamInfo != null and streamInfo['status'] == 'TEMPORARILY_UNAVAILABLE'}" style="position:fixed; top:0; left:0; right:0; z-index:20;
+                    background: linear-gradient(135deg, #7b1fa2, #c62828);
+                    padding: 0.6rem 2rem; display:flex;
+                    align-items:center; gap:0.75rem; font-size:0.9rem;">
+            <i class="fas fa-exclamation-triangle" style="color:#ffe082;"></i>
+            <span th:text="${streamInfo['error'] != null
+                            ? 'Service indisponible : ' + streamInfo['error']
+                            : 'Service de streaming temporairement indisponible — mode dégradé'}">
+            </span>
+        </div>
 
         <!-- Top overlay -->
         <div id="top-overlay">
@@ -312,6 +324,19 @@
                     <span class="dot">•</span>
                     <span th:text="${video.genre}">Genre</span>
                     <span class="meta-badge" th:text="${video.rating}">PG-13</span>
+
+                    <!-- Badge qualité (ex: HD) rendu si disponible -->
+                    <span
+                        th:if="${streamInfo != null and streamInfo['quality'] != null and streamInfo['quality'] != 'N/A'}"
+                        class="meta-badge" th:text="${streamInfo['quality']}"
+                        style="background:rgba(0,114,210,0.25); border-color:#0072d2; color:#6ec6ff;">
+                    </span>
+
+                    <!-- Badge statut : EN DIRECT ou DÉGRADÉ -->
+                    <span th:if="${streamInfo != null and streamInfo['status'] == 'READY'}" class="meta-badge"
+                        style="border-color:#4caf50; color:#4caf50;">EN DIRECT</span>
+                    <span th:if="${streamInfo != null and streamInfo['status'] == 'TEMPORARILY_UNAVAILABLE'}"
+                        class="meta-badge" style="border-color:#e53935; color:#e53935;">DÉGRADÉ</span>
                 </div>
             </div>
         </div>
@@ -342,8 +367,25 @@
     </div>
 
     <!-- ── No trailer fallback ── -->
-    <div id="no-trailer" th:if="${video.trailerUrl == null or video.trailerUrl == ''}">
-        <div id="no-trailer-bg" th:style="'background-image: url(' + ${video.thumbnailUrl} + ');'"></div>
+    <div class="fallback-screen"
+        th:if="${streamInfo != null and streamInfo['status'] == 'TEMPORARILY_UNAVAILABLE' and (video.trailerUrl != null and video.trailerUrl != '')}">
+        <div class="fallback-bg" th:style="'background-image: url(' + ${video.thumbnailUrl} + ');'"></div>
+        <i class="fas fa-broadcast-tower" style="font-size: 4rem; color: rgba(255,255,255,0.3);"></i>
+        <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);">
+            Service de streaming temporairement indisponible
+        </p>
+        <p th:text="${streamInfo['error'] != null ? streamInfo['error'] : 'Veuillez réessayer dans quelques instants.'}"
+            style="font-size: 1rem; color: rgba(255,255,255,0.55); text-align: center; max-width: 700px;">
+            Veuillez réessayer dans quelques instants.
+        </p>
+        <button onclick="history.back()"
+            style="background: #fff; color: #000; border: none; padding: 0.7rem 1.8rem; border-radius: 4px; font-weight: 600; font-size: 1rem; cursor: pointer;">
+            <i class="fas fa-arrow-left me-2"></i> Retour
+        </button>
+    </div>
+
+    <div class="fallback-screen" th:if="${video.trailerUrl == null or video.trailerUrl == ''}">
+        <div class="fallback-bg" th:style="'background-image: url(' + ${video.thumbnailUrl} + ');'"></div>
         <i class="fas fa-film" style="font-size: 4rem; color: rgba(255,255,255,0.3);"></i>
         <p style="font-size: 1.2rem; color: rgba(255,255,255,0.6);">Aucun trailer disponible pour ce contenu</p>
         <button onclick="history.back()"
@@ -352,7 +394,23 @@
         </button>
     </div>
 
-    <script>
+    <div class="fallback-screen"
+        th:if="${(streamInfo == null or streamInfo['streamUrl'] == null or streamInfo['streamUrl'] == '') and (streamInfo == null or streamInfo['status'] == null or streamInfo['status'] != 'TEMPORARILY_UNAVAILABLE') and (video.trailerUrl != null and video.trailerUrl != '')}">
+        <div class="fallback-bg" th:style="'background-image: url(' + ${video.thumbnailUrl} + ');'"></div>
+        <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: rgba(255,255,255,0.3);"></i>
+        <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7);">Lecture indisponible pour le moment</p>
+        <button onclick="history.back()"
+            style="background: #fff; color: #000; border: none; padding: 0.7rem 1.8rem; border-radius: 4px; font-weight: 600; font-size: 1rem; cursor: pointer;">
+            <i class="fas fa-arrow-left me-2"></i> Retour
+        </button>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const VIDEO_ID = /*[[${video.id}]]*/ 0;
+        const USER_ID = /*[[${userId}]]*/ 1;
+        /*]]>*/
+
         const video = document.getElementById('player');
         if (video) {
             const playPauseBtn = document.getElementById('play-pause-btn');
@@ -372,8 +430,9 @@
 
             let hideTimer = null;
             let pauseFlashTimer = null;
+            let lastSavedPct = -1;
 
-            // ── Format time helper ──
+            // ── Format time helper ────────────────────────────────────────────
             function fmtTime(sec) {
                 if (isNaN(sec)) return '0:00';
                 const m = Math.floor(sec / 60);
@@ -381,149 +440,119 @@
                 return `${m}:${s}`;
             }
 
-            // ── Show / hide controls ──
+            // ── Show / hide controls ──────────────────────────────────────────
             function showControls() {
                 topOverlay.classList.remove('hidden');
                 controls.classList.remove('hidden');
                 document.body.classList.add('controls-visible');
                 clearTimeout(hideTimer);
-                if (!video.paused) {
-                    hideTimer = setTimeout(hideControls, 3000);
-                }
+                if (!video.paused) hideTimer = setTimeout(hideControls, 3000);
             }
-
             function hideControls() {
                 topOverlay.classList.add('hidden');
                 controls.classList.add('hidden');
                 document.body.classList.remove('controls-visible');
             }
-
             document.addEventListener('mousemove', showControls);
             document.addEventListener('click', showControls);
 
-            // ── Play / Pause ──
-            function togglePlay() {
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-            }
-
+            // ── Play / Pause ──────────────────────────────────────────────────
+            function togglePlay() { video.paused ? video.play() : video.pause(); }
             video.addEventListener('play', () => {
                 playPauseIcon.classList.replace('fa-play', 'fa-pause');
                 hideTimer = setTimeout(hideControls, 3000);
             });
-
             video.addEventListener('pause', () => {
                 playPauseIcon.classList.replace('fa-pause', 'fa-play');
                 clearTimeout(hideTimer);
                 showControls();
-                // Flash pause indicator
                 pauseIndicator.querySelector('i').className = 'fas fa-pause';
                 pauseIndicator.classList.add('show');
                 clearTimeout(pauseFlashTimer);
                 pauseFlashTimer = setTimeout(() => pauseIndicator.classList.remove('show'), 700);
             });
-
             playPauseBtn.addEventListener('click', togglePlay);
-
-            // Click on video toggles play
             video.addEventListener('click', togglePlay);
 
-            // ── Volume ──
+            // ── Volume ────────────────────────────────────────────────────────
             muteBtn.addEventListener('click', () => {
                 video.muted = !video.muted;
                 volumeSlider.value = video.muted ? 0 : video.volume;
                 updateVolumeIcon();
             });
-
             volumeSlider.addEventListener('input', () => {
                 video.volume = volumeSlider.value;
                 video.muted = (volumeSlider.value == 0);
                 updateVolumeIcon();
             });
-
             function updateVolumeIcon() {
-                if (video.muted || video.volume === 0) {
-                    volumeIcon.className = 'fas fa-volume-mute';
-                } else if (video.volume < 0.5) {
-                    volumeIcon.className = 'fas fa-volume-down';
-                } else {
-                    volumeIcon.className = 'fas fa-volume-up';
-                }
+                if (video.muted || video.volume === 0) volumeIcon.className = 'fas fa-volume-mute';
+                else if (video.volume < 0.5) volumeIcon.className = 'fas fa-volume-down';
+                else volumeIcon.className = 'fas fa-volume-up';
             }
 
-            // ── Progress ──
+            // ── Progress bar (UI + sauvegarde) ────────────────────────────────
             video.addEventListener('timeupdate', () => {
-                if (video.duration) {
-                    const pct = (video.currentTime / video.duration) * 100;
-                    progressBar.style.width = pct + '%';
-                    progressThumb.style.left = pct + '%';
-                    timeDisplay.textContent = `${fmtTime(video.currentTime)} / ${fmtTime(video.duration)}`;
+                if (!video.duration) return;
+                const pct = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = pct + '%';
+                progressThumb.style.left = pct + '%';
+                timeDisplay.textContent = `${fmtTime(video.currentTime)} / ${fmtTime(video.duration)}`;
+
+                // Sauvegarde tous les 10% via StreamingService
+                const pctInt = Math.floor(pct / 10) * 10;
+                if (pctInt > 0 && pctInt !== lastSavedPct) {
+                    lastSavedPct = pctInt;
+                    saveProgress(pctInt);
                 }
             });
-
             progressContainer.addEventListener('click', (e) => {
                 const rect = progressContainer.getBoundingClientRect();
-                const ratio = (e.clientX - rect.left) / rect.width;
-                video.currentTime = ratio * video.duration;
+                video.currentTime = ((e.clientX - rect.left) / rect.width) * video.duration;
             });
 
-            // ── Fullscreen ──
+            // ── Fullscreen ────────────────────────────────────────────────────
             fullscreenBtn.addEventListener('click', () => {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
+                document.fullscreenElement ? document.exitFullscreen()
+                    : document.documentElement.requestFullscreen();
             });
-
             document.addEventListener('fullscreenchange', () => {
-                if (document.fullscreenElement) {
-                    fullscreenIcon.className = 'fas fa-compress';
-                } else {
-                    fullscreenIcon.className = 'fas fa-expand';
-                }
+                fullscreenIcon.className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
             });
 
-            // ── Keyboard shortcuts ──
+            // ── Keyboard shortcuts ────────────────────────────────────────────
             document.addEventListener('keydown', (e) => {
                 showControls();
                 switch (e.code) {
-                    case 'Space':
-                        e.preventDefault();
-                        togglePlay();
-                        break;
-                    case 'ArrowRight':
-                        video.currentTime = Math.min(video.currentTime + 10, video.duration);
-                        break;
-                    case 'ArrowLeft':
-                        video.currentTime = Math.max(video.currentTime - 10, 0);
-                        break;
-                    case 'ArrowUp':
-                        video.volume = Math.min(video.volume + 0.1, 1);
-                        volumeSlider.value = video.volume;
-                        updateVolumeIcon();
-                        break;
-                    case 'ArrowDown':
-                        video.volume = Math.max(video.volume - 0.1, 0);
-                        volumeSlider.value = video.volume;
-                        updateVolumeIcon();
-                        break;
-                    case 'KeyF':
-                        fullscreenBtn.click();
-                        break;
-                    case 'KeyM':
-                        muteBtn.click();
-                        break;
-                    case 'Escape':
-                        history.back();
-                        break;
+                    case 'Space': e.preventDefault(); togglePlay(); break;
+                    case 'ArrowRight': video.currentTime = Math.min(video.currentTime + 10, video.duration); break;
+                    case 'ArrowLeft': video.currentTime = Math.max(video.currentTime - 10, 0); break;
+                    case 'ArrowUp': video.volume = Math.min(video.volume + 0.1, 1); volumeSlider.value = video.volume; updateVolumeIcon(); break;
+                    case 'ArrowDown': video.volume = Math.max(video.volume - 0.1, 0); volumeSlider.value = video.volume; updateVolumeIcon(); break;
+                    case 'KeyF': fullscreenBtn.click(); break;
+                    case 'KeyM': muteBtn.click(); break;
+                    case 'Escape': history.back(); break;
                 }
             });
 
-            // Init
+            // ── Sauvegarde de progression (POST /api/streaming/progress) ──────
+            //    Appelée automatiquement toutes les 10% pendant la lecture.
+            //    C'est le seul appel résidant côté client : startStream() est
+            //    désormais géré serveur-side par HomeController → StreamingService.
+            async function saveProgress(pct) {
+                try {
+                    await fetch('/api/streaming/progress', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId: USER_ID, videoId: VIDEO_ID, progress: pct })
+                    });
+                    console.log(`[Streaming] Progression sauvegardée : ${pct}%`);
+                } catch (err) {
+                    console.warn('[Streaming] Erreur sauvegarde progression :', err);
+                }
+            }
+
+            // ── Init ──────────────────────────────────────────────────────────
             showControls();
         }
     </script>

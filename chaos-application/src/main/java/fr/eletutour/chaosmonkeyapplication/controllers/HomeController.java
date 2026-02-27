@@ -5,20 +5,28 @@ import fr.eletutour.chaosmonkeyapplication.exception.CatalogException;
 import fr.eletutour.chaosmonkeyapplication.exception.RequestTimeoutException;
 import fr.eletutour.chaosmonkeyapplication.models.Video;
 import fr.eletutour.chaosmonkeyapplication.services.CatalogService;
+import fr.eletutour.chaosmonkeyapplication.services.SectionService;
+import fr.eletutour.chaosmonkeyapplication.services.StreamingService;
+import fr.eletutour.chaosmonkeyapplication.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.security.Principal;
 
 @Controller
 public class HomeController {
@@ -26,12 +34,20 @@ public class HomeController {
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
     private final CatalogService catalogService;
     private final UIConfiguration uiConfiguration;
+    private final StreamingService streamingService;
+    private final SectionService sectionService;
+    private final UserService userService;
+    private static final Long DEFAULT_USER_ID = 1L;
 
     public HomeController(CatalogService catalogService, UIConfiguration uiConfiguration,
-            fr.eletutour.chaosmonkeyapplication.services.SectionService sectionService) {
+            StreamingService streamingService,
+            SectionService sectionService,
+            UserService userService) {
         this.catalogService = catalogService;
         this.uiConfiguration = uiConfiguration;
+        this.streamingService = streamingService;
         this.sectionService = sectionService;
+        this.userService = userService;
     }
 
     /**
@@ -200,8 +216,6 @@ public class HomeController {
         return "index";
     }
 
-    private final fr.eletutour.chaosmonkeyapplication.services.SectionService sectionService;
-
     @GetMapping("/section")
     public String section(@RequestParam("name") String name, Model model) {
         log.info(">>> [SECTION] Entrée dans la méthode section() pour '{}'", name);
@@ -222,14 +236,70 @@ public class HomeController {
         return "index";
     }
 
+    private Long resolveCurrentUserId(Principal principal) {
+        if (principal == null || principal.getName() == null || principal.getName().isBlank()) {
+            log.warn("[WATCH] Aucun principal en session, fallback userId={}", DEFAULT_USER_ID);
+            return DEFAULT_USER_ID;
+        }
+
+        String principalName = principal.getName();
+        try {
+            return Long.parseLong(principalName);
+        } catch (NumberFormatException ignored) {
+            return userService.getUserByEmail(principalName)
+                    .map(user -> user.getId())
+                    .orElseGet(() -> {
+                        log.warn("[WATCH] Principal '{}' introuvable en base, fallback userId={}",
+                                principalName, DEFAULT_USER_ID);
+                        return DEFAULT_USER_ID;
+                    });
+        }
+    }
+
     @GetMapping("/watch/{id}")
-    public String watch(@PathVariable Long id, Model model) {
+    public String watch(@PathVariable Long id, Model model, Principal principal) {
         log.info(">>> [WATCH] Entrée dans la méthode watch() pour videoId={}", id);
+        Long currentUserId = resolveCurrentUserId(principal);
+
+        // 1. Récupérer les métadonnées de la vidéo
         Optional<Video> videoOpt = catalogService.getVideoById(id);
         if (videoOpt.isEmpty()) {
             throw new CatalogException(CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id);
         }
         model.addAttribute("video", videoOpt.get());
+        model.addAttribute("userId", currentUserId);
+
+        // 2. Initialiser la session de streaming
+        log.info("[WATCH] Initialisation stream pour userId={}, videoId={}", currentUserId, id);
+        
+        try {
+            Map<String, Object> streamInfo = streamingService.startStream(currentUserId, id);
+            log.info("[WATCH] Le service de streaming a répondu : status={}, quality={}",
+                    streamInfo.get("status"), streamInfo.get("quality"));
+            model.addAttribute("streamInfo", streamInfo);
+        } catch (Exception e) {
+            log.error("[WATCH] Erreur lors de l'appel au service de streaming : {}", e.getMessage());
+            // Fallback manuel si l'appel API échoue
+            Map<String, Object> fallbackInfo = Map.of(
+                "status", "TEMPORARILY_UNAVAILABLE",
+                "quality", "N/A",
+                "streamUrl", "",
+                "error", "Impossible de joindre le service de streaming"
+            );
+            model.addAttribute("streamInfo", fallbackInfo);
+        }
+
         return "player_v2";
+    }
+
+    /**
+     * Endpoint réactif pour le streaming de la vidéo.
+     * Appelle le service de streaming pour obtenir la ressource de façon réactive.
+     */
+    @GetMapping(value = "/api/streaming/video/{id}", produces = "video/mp4")
+    @ResponseBody
+    public Mono<Resource> streamVideo(@PathVariable Long id) {
+        log.info("[CONTROLLER] Requête de flux réactif pour la vidéo ID: {}", id);
+        return streamingService.getVideoResource(id);
     }
 }

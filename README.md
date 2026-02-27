@@ -55,7 +55,7 @@ git clone <repository-url>
 cd chaos-monkey-application
 
 # Compiler et lancer l'application
-./mvnw spring-boot:run
+mvn -pl chaos-application -am spring-boot:run
 ```
 
 L'application démarre sur `http://localhost:8080`
@@ -90,6 +90,7 @@ app.ui=v1
 | GET     | `/my-list`             | Ma liste                              |
 | GET     | `/search?q={query}`    | Recherche de vidéos                   |
 | GET     | `/section?name={name}` | Contenu par section (Disney, Marvel…) |
+| GET     | `/watch/{id}`          | Lecteur vidéo (player v2)             |
 
 > [!NOTE]
 > Les endpoints MVC retournent une page d'erreur thématique (v1 ou v2) si aucun résultat n'est trouvé.
@@ -111,6 +112,7 @@ app.ui=v1
 ### Streaming (REST)
 
 - `POST /api/streaming/start` — Démarrer un streaming
+- `GET /api/streaming/video/{id}` — Flux vidéo MP4 (endpoint de lecture)
 - `POST /api/streaming/progress` — Mettre à jour la progression
 - `GET /api/streaming/history/{userId}` — Historique de visionnage
 - `GET /api/streaming/completed/{userId}` — Vidéos complétées
@@ -152,11 +154,11 @@ La documentation inclut les informations de contact, la licence Apache 2.0, les 
 ### Activation
 
 > [!IMPORTANT]
-> Pour activer Chaos Monkey, il est **indispensable** d'ajouter la ligne suivante dans `application.properties` :
-> ```properties
-> spring.profiles.active=chaos-monkey
+> Pour activer Chaos Monkey, lance l'application avec le profil `chaos-monkey` :
+> ```bash
+> mvn -pl chaos-application -am spring-boot:run -Dspring-boot.run.profiles=chaos-monkey
 > ```
-> Sans cette configuration, Chaos Monkey sera présent mais **restera inactif**.
+> Le profil est défini dans `chaos-application/src/main/resources/application-chaos-monkey.yaml`.
 
 ### Endpoints Actuator & Resilience
 
@@ -298,7 +300,8 @@ src/main/resources/
 │       └── chaos+.png
 └── templates/
     ├── index.html              # Interface v1
-    └── index_v2.html           # Interface v2 (Disney+)
+    ├── index_v2.html           # Interface v2 (Disney+)
+    └── player_v2.html          # Lecteur vidéo v2
 ```
 
 ## 🧪 Scénarios de test
@@ -344,6 +347,24 @@ curl http://localhost:8080/actuator/circuitbreakers
 #    → Même quand le service est "cassé", l'API retourne du contenu 
 #      populaire par défaut ("Popular now (Fallback)")
 ```
+
+### 3. Test de charge (Gatling)
+
+Le module `gatling-test` contient la simulation `ChaosSimulation` qui couvre :
+- navigation catalogue
+- démarrage de stream
+- lecture de chunks vidéo (`GET /api/streaming/video/{id}` avec header `Range`)
+- mise à jour de progression
+
+Exécution :
+
+```bash
+# L'application doit déjà être démarrée sur http://localhost:8080
+mvn -pl gatling-test -Dgatling.simulationClass=fr.eletutour.ChaosSimulation gatling:test
+```
+
+Rapport HTML généré dans :
+- `gatling-test/target/gatling/<run-id>/index.html`
 
 ## 📝 Licence
 

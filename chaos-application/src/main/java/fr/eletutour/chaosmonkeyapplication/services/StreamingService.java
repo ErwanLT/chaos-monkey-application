@@ -9,7 +9,10 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,34 @@ public class StreamingService {
         this.userService = userService;
     }
 
+    /**
+     * Retourne une ressource réactive pour le streaming vidéo.
+     */
+    public Mono<Resource> getVideoResource(Long id) {
+        return Mono.justOrEmpty(catalogService.getVideoById(id))
+                .switchIfEmpty(Mono.error(new CatalogException(
+                        CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id)))
+                .map(video -> {
+                    String trailerUrl = video.getTrailerUrl();
+                    if (trailerUrl == null || trailerUrl.isEmpty()) {
+                        throw new CatalogException(
+                                CatalogException.CatalogError.VIDEO_NOT_FOUND,
+                                "Aucun contenu disponible pour id=" + id);
+                    }
+                    if (trailerUrl.startsWith("/")) {
+                        trailerUrl = trailerUrl.substring(1);
+                    }
+                    log.info("[STREAM-SERVICE] Préparation de la ressource : {}", trailerUrl);
+                    Resource resource = new ClassPathResource("static/" + trailerUrl);
+                    if (!resource.exists() || !resource.isReadable()) {
+                        throw new StreamingException(
+                                StreamingException.StreamingError.PLAYBACK_ERROR,
+                                "Ressource introuvable ou illisible: " + trailerUrl);
+                    }
+                    return resource;
+                });
+    }
+
     @Retry(name = "streamingService", fallbackMethod = "fallbackStartStream")
     @CircuitBreaker(name = "streamingService")
     public Map<String, Object> startStream(Long userId, Long videoId) {
@@ -44,11 +75,14 @@ public class StreamingService {
         }
 
         try {
-            // Simulate stream initialization
+            // Simulate stream initialization with a slight delay to mimic network
+            Thread.sleep(100); 
+
             Map<String, Object> streamInfo = new HashMap<>();
             streamInfo.put("userId", userId);
             streamInfo.put("videoId", videoId);
-            streamInfo.put("streamUrl", "https://cdn.streaming.example.com/stream/" + videoId);
+            // Point to a local reactive streaming endpoint we will create
+            streamInfo.put("streamUrl", "/api/streaming/video/" + videoId);
             streamInfo.put("quality", "HD");
             streamInfo.put("status", "READY");
 
