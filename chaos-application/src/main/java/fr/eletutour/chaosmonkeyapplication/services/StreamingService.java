@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,31 +34,28 @@ public class StreamingService {
     }
 
     /**
-     * Retourne une ressource réactive pour le streaming vidéo.
+     * Retourne une ressource pour le streaming vidéo.
      */
-    public Mono<Resource> getVideoResource(Long id) {
-        return Mono.justOrEmpty(catalogService.getVideoById(id))
-                .switchIfEmpty(Mono.error(new CatalogException(
-                        CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id)))
-                .map(video -> {
-                    String trailerUrl = video.getTrailerUrl();
-                    if (trailerUrl == null || trailerUrl.isEmpty()) {
-                        throw new CatalogException(
-                                CatalogException.CatalogError.VIDEO_NOT_FOUND,
-                                "Aucun contenu disponible pour id=" + id);
-                    }
-                    if (trailerUrl.startsWith("/")) {
-                        trailerUrl = trailerUrl.substring(1);
-                    }
-                    log.info("[STREAM-SERVICE] Préparation de la ressource : {}", trailerUrl);
-                    Resource resource = new ClassPathResource("static/" + trailerUrl);
-                    if (!resource.exists() || !resource.isReadable()) {
-                        throw new StreamingException(
-                                StreamingException.StreamingError.PLAYBACK_ERROR,
-                                "Ressource introuvable ou illisible: " + trailerUrl);
-                    }
-                    return resource;
-                });
+    public Resource getVideoResource(Long id) {
+        Video video = catalogService.getVideoById(id).orElseThrow(() -> new CatalogException(
+                CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id));
+        String trailerUrl = video.getTrailerUrl();
+        if (trailerUrl == null || trailerUrl.isEmpty()) {
+            throw new CatalogException(
+                    CatalogException.CatalogError.VIDEO_NOT_FOUND,
+                    "Aucun contenu disponible pour id=" + id);
+        }
+        if (trailerUrl.startsWith("/")) {
+            trailerUrl = trailerUrl.substring(1);
+        }
+        log.info("[STREAM-SERVICE] Préparation de la ressource : {}", trailerUrl);
+        Resource resource = new ClassPathResource("static/" + trailerUrl);
+        if (!resource.exists() || !resource.isReadable()) {
+            throw new StreamingException(
+                    StreamingException.StreamingError.PLAYBACK_ERROR,
+                    "Ressource introuvable ou illisible: " + trailerUrl);
+        }
+        return resource;
     }
 
     @Retry(name = "streamingService", fallbackMethod = "fallbackStartStream")

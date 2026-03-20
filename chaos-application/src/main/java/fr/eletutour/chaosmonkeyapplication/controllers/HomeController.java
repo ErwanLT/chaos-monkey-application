@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import reactor.core.publisher.Mono;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -293,13 +291,13 @@ public class HomeController {
     }
 
     /**
-     * Endpoint réactif pour le streaming de la vidéo.
-     * Appelle le service de streaming pour obtenir la ressource de façon réactive.
+     * Endpoint pour le streaming de la vidéo.
+     * Appelle le service de streaming pour obtenir la ressource.
      */
     @GetMapping(value = "/api/streaming/video/{id}", produces = "video/mp4")
     @ResponseBody
-    public Mono<Resource> streamVideo(@PathVariable Long id) {
-        log.info("[CONTROLLER] Requête de flux réactif pour la vidéo ID: {}", id);
+    public Resource streamVideo(@PathVariable Long id) {
+        log.info("[CONTROLLER] Requête de flux pour la vidéo ID: {}", id);
         return streamingService.getVideoResource(id);
     }
 }
