@@ -7,6 +7,7 @@ import fr.eletutour.chaosmonkeyapplication.models.WatchHistory;
 import fr.eletutour.chaosmonkeyapplication.repositories.WatchHistoryRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class StreamingService {
@@ -36,26 +38,30 @@ public class StreamingService {
     /**
      * Retourne une ressource pour le streaming vidéo.
      */
-    public Resource getVideoResource(Long id) {
-        Video video = catalogService.getVideoById(id).orElseThrow(() -> new CatalogException(
-                CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id));
-        String trailerUrl = video.getTrailerUrl();
-        if (trailerUrl == null || trailerUrl.isEmpty()) {
-            throw new CatalogException(
-                    CatalogException.CatalogError.VIDEO_NOT_FOUND,
-                    "Aucun contenu disponible pour id=" + id);
-        }
-        if (trailerUrl.startsWith("/")) {
-            trailerUrl = trailerUrl.substring(1);
-        }
-        log.info("[STREAM-SERVICE] Préparation de la ressource : {}", trailerUrl);
-        Resource resource = new ClassPathResource("static/" + trailerUrl);
-        if (!resource.exists() || !resource.isReadable()) {
-            throw new StreamingException(
-                    StreamingException.StreamingError.PLAYBACK_ERROR,
-                    "Ressource introuvable ou illisible: " + trailerUrl);
-        }
-        return resource;
+    @TimeLimiter(name = "streamingService")
+    public CompletableFuture<Resource> getVideoResource(Long id) {
+        return CompletableFuture.supplyAsync(() -> {
+            Video video = catalogService.getVideoById(id)
+                    .orElseThrow(() -> new CatalogException(
+                            CatalogException.CatalogError.VIDEO_NOT_FOUND, "id=" + id));
+            String trailerUrl = video.getTrailerUrl();
+            if (trailerUrl == null || trailerUrl.isEmpty()) {
+                throw new CatalogException(
+                        CatalogException.CatalogError.VIDEO_NOT_FOUND,
+                        "Aucun contenu disponible pour id=" + id);
+            }
+            if (trailerUrl.startsWith("/")) {
+                trailerUrl = trailerUrl.substring(1);
+            }
+            log.info("[STREAM-SERVICE] Préparation de la ressource : {}", trailerUrl);
+            Resource resource = new ClassPathResource("static/" + trailerUrl);
+            if (!resource.exists() || !resource.isReadable()) {
+                throw new StreamingException(
+                        StreamingException.StreamingError.PLAYBACK_ERROR,
+                        "Ressource introuvable ou illisible: " + trailerUrl);
+            }
+            return resource;
+        });
     }
 
     @Retry(name = "streamingService", fallbackMethod = "fallbackStartStream")

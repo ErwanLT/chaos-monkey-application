@@ -48,7 +48,6 @@ public class OpenApiConfiguration {
                         .url(serverUrl)
                         .description(serverDescription))
                 .specVersion(SpecVersion.V31)
-                .tags(List.of(new Tag().name("ChaosMonkey").description("ChaosMonkey tag"), new Tag().name("Chaos Engineering").description("Chaos Engineering tag")))
                 .info(new Info()
                         .title(title)
                         .description(description)

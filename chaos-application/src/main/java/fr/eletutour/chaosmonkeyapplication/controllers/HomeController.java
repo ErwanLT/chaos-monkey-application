@@ -65,7 +65,7 @@ public class HomeController {
                 return result;
             });
 
-            return future.get(2, TimeUnit.SECONDS);
+            return future.get(1, TimeUnit.SECONDS);
         } catch (TimeoutException e) {
             log.error("[{}] 💥 TIMEOUT déclenché ! Fermeture forcée du thread.", taskName);
             throw new RequestTimeoutException("Le service a mis trop de temps.");
@@ -298,6 +298,13 @@ public class HomeController {
     @ResponseBody
     public Resource streamVideo(@PathVariable Long id) {
         log.info("[CONTROLLER] Requête de flux pour la vidéo ID: {}", id);
-        return streamingService.getVideoResource(id);
+        try {
+            return streamingService.getVideoResource(id).join(); // CompletableFuture -> Resource
+        } catch (CompletionException e) {
+            if (e.getCause() instanceof RequestTimeoutException) {
+                throw (RequestTimeoutException) e.getCause();
+            }
+            throw e;
+        }
     }
 }
