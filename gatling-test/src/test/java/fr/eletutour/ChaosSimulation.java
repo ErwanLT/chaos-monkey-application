@@ -175,7 +175,8 @@ public class ChaosSimulation extends Simulation {
                                 .times(5)
                                 .eachLevelLasting(Duration.ofSeconds(30))
                                 .separatedByRampsLasting(Duration.ofSeconds(10))
-                                .startingFrom(10)
+                                .startingFrom(10),
+                        constantUsersPerSec(40).during(Duration.ofSeconds(60))
                 )
         ).protocols(HTTP_PROTOCOL)
                 .assertions(
